@@ -1,6 +1,8 @@
-const { app, BrowserWindow } = require('electron')
+const { ipcMain, app, BrowserWindow, MessageChannelMain } = require('electron')
 
 const { startReceiveTweet } = require('./ReceiveTweet.js')
+
+let mainWindow;
 
 let tweetInfo = {
   Identity_Language: {},
@@ -9,6 +11,13 @@ let tweetInfo = {
   Service: {}
 };
 
+ipcMain.on('tweetMessage', (event, arg) => {
+  // When we receive a MessagePort in the main process, it becomes a
+  // MessagePortMain.
+  console.log(arg);
+  event.sender.send('tweetMessage-reply', tweetInfo);
+})
+
 function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -16,8 +25,10 @@ function createWindow () {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       webSecurity: false,
-      allowRunningInsecureContent: true
+      allowRunningInsecureContent: true,
+      enableRemoteModule: true
     }
   })
 
@@ -50,8 +61,6 @@ app.on('activate', () => {
 
   if (BrowserWindow.getAllWindows().length === 0) {
     console.log(1);
-    createWindow()
+    mainWindow = createWindow()
   }
 })
-
-// In this file you can include the rest of your app's specific main process

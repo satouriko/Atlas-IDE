@@ -33,7 +33,7 @@ function startReceiveTweet(tweetInfo){
             default:
                 break;
         }
-        console.log(tweetInfo);
+        //console.log(tweetInfo);
     });
 
     client.bind(PORT, HOST);

@@ -1,12 +1,18 @@
 const { app, BrowserWindow } = require('electron')
 
+const { startReceiveTweet } = require('./ReceiveTweet.js')
+
+let tweetInfo = {};
+
 function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      webSecurity: false,
+      allowRunningInsecureContent: true
     }
   })
 
@@ -15,6 +21,8 @@ function createWindow () {
 
   // Open the DevTools.
   win.webContents.openDevTools()
+
+  startReceiveTweet(tweetInfo)
 }
 
 // This method will be called when Electron has finished
@@ -36,6 +44,7 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
 
   if (BrowserWindow.getAllWindows().length === 0) {
+    console.log(1);
     createWindow()
   }
 })

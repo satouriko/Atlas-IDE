@@ -1,7 +1,7 @@
 import './App.css'
 import 'carbon-components/css/carbon-components.css'
 import {
-  Button, Tabs, Tab, Dropdown, DataTable,
+  Tabs, Tab, Dropdown, DataTable,
   Table, TableHead, TableRow, TableBody, TableCell, TableHeader,
   Grid, Row, Column
 } from 'carbon-components-react'
@@ -11,30 +11,30 @@ const rows = [
   {
     id: 'a',
     name: 'Load balancer 1',
-    status: 'Disabled',
+    status: 'Disabled'
   },
   {
     id: 'b',
     name: 'Load balancer 2',
-    status: 'Starting',
+    status: 'Starting'
   },
   {
     id: 'c',
     name: 'Load balancer 3',
-    status: 'Active',
-  },
-];
+    status: 'Active'
+  }
+]
 
 const headers = [
   {
     key: 'name',
-    header: 'Name',
+    header: 'Name'
   },
   {
     key: 'status',
-    header: 'Status',
-  },
-];
+    header: 'Status'
+  }
+]
 
 function App () {
   return (

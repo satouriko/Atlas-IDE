@@ -2,7 +2,12 @@ const { app, BrowserWindow } = require('electron')
 
 const { startReceiveTweet } = require('./ReceiveTweet.js')
 
-let tweetInfo = {};
+let tweetInfo = {
+  Identity_Language: {},
+  Identity_Entity: {},
+  Identity_Thing: {},
+  Service: {}
+};
 
 function createWindow () {
   // Create the browser window.

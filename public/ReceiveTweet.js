@@ -13,9 +13,10 @@ function startReceiveTweet(tweetInfo){
     });
 
     client.on('message', function (message, remote) {   
-        console.log('A: Epic Command Received. Preparing Relay.');
-        console.log('B: From: ' + remote.address + ':' + remote.port +' - ' + message);
-        
+        //console.log('A: Epic Command Received. Preparing Relay.');
+        //console.log('B: From: ' + remote.address + ':' + remote.port +' - ' + message);
+        let tweetObject = JSON.parse(('' + message).replaceAll('"Input"','Input').replaceAll('"Input1"','Input1').replaceAll('"Input2"','Input2'));
+        console.log(tweetObject);
     });
 
     client.bind(PORT, HOST);

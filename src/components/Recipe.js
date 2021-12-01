@@ -2,15 +2,18 @@ import BlocklyComponent, { Block, Value, Field, Shadow, Category } from '../Bloc
 import BlocklyJS from 'blockly/javascript';
 import { makeCustomBlocks } from '../blocks/customblocks';
 import '../generator/generator';
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as Blockly from 'blockly/core'
 
 export function Recipe(props) {
   const { tweetInfo } = props
+  const [services, setServices] = useState([])
   useEffect(() => {
-    makeCustomBlocks()
-    console.log(tweetInfo)
-    console.log(Blockly.Blocks)
+    makeCustomBlocks(tweetInfo)
+    setServices(Object.keys(Blockly.Blocks).filter(blockType => blockType.startsWith('Service_')))
+    setTimeout(() => {
+      simpleWorkspace.current.refreshToolbox()
+    })
   }, [Object.keys(tweetInfo.Service).join('\n')])
   const simpleWorkspace = useRef()
   const generateCode = () => {
@@ -37,14 +40,11 @@ export function Recipe(props) {
             <Block type="recipe"></Block>
             <Block type="ignore"></Block>
             <Block type="cond_eval"></Block>
-            <block type="logic_compare"></block>
-            <block type="logic_operation"></block>
-            <block type="logic_negate"></block>
-            <block type="logic_boolean"></block>
-            <block type="logic_null"></block>
           </Category>
           <Category name="Services">
-            <Block type="service1"></Block>
+            {services.map((serviceKey) => (
+              <Block type={serviceKey} key={serviceKey} />
+            ))}
           </Category>
           <Category name="Relationships"></Category>
           <Category name="Literals">

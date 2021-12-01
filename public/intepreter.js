@@ -139,7 +139,6 @@ async function executeStatement(tweetInfo, statement){
             }
             result = false;
             if(pass) {
-                console.log("in sec loop\n");
                 try {
                     let thenStatement2 = await executeStatement(tweetInfo, statement.thenStatement);
                     if(typeof thenStatement2 == 'boolean') {

@@ -181,7 +181,7 @@ const electron = window.require('electron')
               type: 'service',
               thingID: 'RPI1',
               entityID: 'BUZZER',
-              serviceName: 'Buzz',
+              serviceName: 'BUZZ',
               serviceInput: [1000, 5]
             }
       }

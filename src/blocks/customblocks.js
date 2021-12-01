@@ -1,6 +1,6 @@
 /**
  * @license
- * 
+ *
  * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,60 +31,51 @@ import * as Blockly from 'blockly/core';
 import '../fields/BlocklyReactField';
 import '../fields/DateField';
 
-var testReactField = {
-  "type": "test_react_field",
-  "message0": "custom field %1",
-  "args0": [
-    {
-      "type": "field_react_component",
-      "name": "FIELD",
-      "text": "Click me"
-    },
-  ],
-  "previousStatement": null,
-  "nextStatement": null,
-};
-
-Blockly.Blocks['test_react_field'] = {
-  init: function() {
-    this.jsonInit(testReactField);
-    this.setStyle('loop_blocks');
+export function parseAPI (apiString) {
+  // BUZZ:[Input1,int, NULL|Input2,int, NULL]:(Output,int, NULL)
+  const regex = /\w+\s*:\s*\[(?:\s*(\w+)\s*,\s*(\w+)\s*,\s*\w+\s*\|)*(?:\s*(\w+)\s*,\s*(\w+)\s*,\s*\w+\s*)]:\(\s*\w+\s*,\s*(\w+)\s*,\s*\w+\s*\)/
+  const test = regex.exec(apiString)
+  test.shift()
+  const outputType = test.pop()
+  const inputs = []
+  for (let i = 0; i + 1 < test.length; i += 2) {
+    inputs.push({
+      name: test[i],
+      type: test[i+1]
+    })
   }
-};
-
-var reactDateField = {
-  "type": "test_react_date_field",
-  "message0": "date field %1",
-  "args0": [
-    {
-      "type": "field_react_date",
-      "name": "DATE",
-      "date": "01/01/2020"
-    },
-  ],
-  "previousStatement": null,
-  "nextStatement": null,
-};
-
-Blockly.Blocks['test_react_date_field'] = {
-  init: function() {
-    this.jsonInit(reactDateField);
-    this.setStyle('loop_blocks');
+  return {
+    inputs,
+    outputType
   }
-};
+}
 
-var service = {
-  "type": "service",
-  "message0": "service",
-  "output": null,
-  "colour": 230,
-  "tooltip": "",
-  "helpUrl": ""
-};
+export function makeCustomBlocks () {
 
-Blockly.Blocks['service'] = {
-  init: function() {
-    this.jsonInit(service);
-    this.setStyle('loop_blocks');
+  Blockly.Blocks['ignore'] = {
+    init: function () {
+      this.appendValueInput("NAME")
+        .setCheck(null);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(230);
+      this.setTooltip("");
+      this.setHelpUrl("");
+    }
   }
-};
+
+  Blockly.Blocks['service1'] = {
+    init: function() {
+      this.appendValueInput("Input1")
+        .setCheck("Number")
+        .appendField("Input1");
+      this.appendValueInput("Input2")
+        .setCheck("Number")
+        .appendField("Input2");
+      this.setOutput(true, null);
+      this.setColour(230);
+      this.setTooltip("");
+      this.setHelpUrl("");
+    }
+  };
+}

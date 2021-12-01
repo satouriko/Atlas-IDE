@@ -34,7 +34,14 @@ export function Recipe(props) {
 </xml>
       `}>
           <Category name="Logic">
+            <Block type="recipe"></Block>
             <Block type="ignore"></Block>
+            <Block type="cond_eval"></Block>
+            <block type="logic_compare"></block>
+            <block type="logic_operation"></block>
+            <block type="logic_negate"></block>
+            <block type="logic_boolean"></block>
+            <block type="logic_null"></block>
           </Category>
           <Category name="Services">
             <Block type="service1"></Block>

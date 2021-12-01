@@ -34,6 +34,7 @@ export function Recipe(props) {
                           }}
                           initialXml={`
 <xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="recipe"></block>
 </xml>
       `}>
           <Category name="Logic">

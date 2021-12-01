@@ -128,26 +128,84 @@ const electron = window.require('electron')
       serviceInput: [500, 5]
     }
   ];
+  let statementList3 = [
+    {
+      type: 'ifThen',
+      ifStatement: {
+          type: 'service',
+          thingID: 'RPI1',
+          entityID: 'BUZZER',
+          serviceName: 'BUZZ',
+          serviceInput: [1000, 10]
+      },
+      thenStatement: {
+        type: 'service',
+        thingID: 'RPI1',
+        entityID: 'LED',
+        serviceName: 'TurnOn',
+        serviceInput: [0]
+      }
+    }
+  ];
 
 function testButton(){
   console.log(statementList1);
   electron.ipcRenderer.on('runApp-finish', (event, arg) => {
       console.log('finish running statement ' + arg);
-      })
-      electron.ipcRenderer.send('runApp', {
-        appName: 'testApp1',
-        statementList: statementList1
-      })
+  })
+  electron.ipcRenderer.send('runApp', {
+    appName: 'testApp1',
+    statementList: statementList1
+  })
+}
+
+function saveButton(){
+  console.log('save');
+  electron.ipcRenderer.on('saveApp-finish', (event, arg) => {
+    console.log('finish saving');
+  })
+  electron.ipcRenderer.send('saveApp', {
+    appName: 'testApp1',
+    fileName: './theFile.txt',
+    statementList: statementList1
+  })
+}
+
+function clearButton(){
+  console.log('clear');
+  statementList1 = [];
+}
+
+function loadButton(){
+  console.log('load');
+  electron.ipcRenderer.on('getApp-reply', (event, arg) => {
+    statementList1 = arg.statementList;
+  })
+  electron.ipcRenderer.on('loadApp-finish', (event, arg) => {
+    electron.ipcRenderer.send('getApp', 'testApp1');
+  })
+  electron.ipcRenderer.send('loadApp', './theFile.txt');
 }
 
 function testButton2(){
   console.log(statementList2);
   electron.ipcRenderer.on('runApp-finish', (event, arg) => {
+    console.log('finish running statement ' + arg);
+  })
+  electron.ipcRenderer.send('runApp', {
+    appName: 'testApp2',
+    statementList: statementList2
+  })
+}
+
+function testButton3(){
+  console.log(statementList2);
+  electron.ipcRenderer.on('runApp-finish', (event, arg) => {
       console.log('finish running statement ' + arg);
       })
       electron.ipcRenderer.send('runApp', {
-        appName: 'testApp2',
-        statementList: statementList2
+        appName: 'testApp3',
+        statementList: statementList3
       })
 }
 
@@ -195,10 +253,24 @@ function App () {
           <Button onClick = {testButton}>
           BuzzAndLightOn
           </Button>
+          <Button onClick = {saveButton}>
+          Save this app
+          </Button>
+          <Button onClick = {clearButton}>
+          Clear this app
+          </Button>
+          <Button onClick = {loadButton}>
+          Load this app
+          </Button>
           <p>{JSON.stringify(statementList2)}</p>
           <Button onClick = {testButton2}>
           BuzzAndLightOff
           </Button>
+          <p>{JSON.stringify(statementList3)}</p>
+          <Button onClick = {testButton3}>
+            IfBuzzThenBuzzsd
+          </Button>
+          
         </Tab>
       </Tabs>
     </div>

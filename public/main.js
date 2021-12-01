@@ -3,6 +3,7 @@ const fs = require('fs')
 const { startReceiveTweet } = require('./ReceiveTweet.js')
 const { executeStatement } = require('./intepreter.js');
 const { captureRejectionSymbol } = require('events');
+const path = require('path');
 
 let mainWindow;
 
@@ -61,19 +62,26 @@ let appInfo = {
   statementList: []
 }
 */
+
 ipcMain.on('saveApp', (event, appInfo) => {
+  if(AppList[appInfo.appName] === undefined){
+    AppList[appInfo.appName] = {};
+  }
   AppList[appInfo.appName].statementList = appInfo.statementList;
   try {
     fs.writeFileSync(appInfo.fileName, JSON.stringify(AppList[appInfo.appName]), {flag: 'r+'} );
+    event.sender.send('saveApp-finish', null);
   } catch (err) {
     console.error(err)
   }
 })
 
-ipcMain.on('loadApp', (event, fileName) => {
+ipcMain.on('loadApp', async (event, fileName) => {
   try {
-    targetApp = JSON.parse(fs.readFileSync(fileName));
+    let appObj = await fs.readFileSync(fileName);
+    targetApp = JSON.parse(appObj);
     AppList[targetApp.appName] = targetApp;
+    event.sender.send('loadApp-finish', null);
   } catch (err) {
     console.error(err);
   }

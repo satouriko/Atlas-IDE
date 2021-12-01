@@ -2,7 +2,7 @@ const {executeStatement} = require('./intepreter.js');
 
 function startReceiveTweet(tweetInfo){
     var PORT = 1235;
-    var HOST = '10.20.23.61';
+    var HOST = '10.20.23.66';
     var dgram = require('dgram');
     var client = dgram.createSocket('udp4');
 
@@ -33,7 +33,7 @@ function startReceiveTweet(tweetInfo){
             case 'Service':
                 console.log('Service!!');
                 tweetInfo.Service[tweetObject['Thing ID'] + tweetObject['Entity ID'] + tweetObject['Name']] = tweetObject;
-                if(tweetObject['Name'] == 'TurnOff'){
+                if(tweetObject['Name'] == 'TurnOff') {
                     executeStatement(tweetInfo, {
                         type: 'service',
                         thingID: tweetObject['Thing ID'],
@@ -42,6 +42,10 @@ function startReceiveTweet(tweetInfo){
                         serviceInput: [0]
                     });
                 }
+                break;
+            case 'Relationship':
+                console.log('relationship!!');
+                tweetInfo.Service[tweetObject['Thing ID'] + tweetObject['Entity ID'] + tweetObject['Name']] = tweetObject;
                 break;
             default:
                 break;

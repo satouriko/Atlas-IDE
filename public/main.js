@@ -1,6 +1,7 @@
 const { ipcMain, app, BrowserWindow, MessageChannelMain } = require('electron')
 
 const { startReceiveTweet } = require('./ReceiveTweet.js')
+const { executeStatement } = require('./intepreter.js')
 
 let mainWindow;
 
@@ -22,7 +23,11 @@ ipcMain.on('tweetMessage', (event, arg) => {
 })
 
 ipcMain.on('runApp', (event, statementList) => {
-  
+  for(let i = 0; i < statementList.length; i++){
+    if(canExcute){
+      executeStatement(tweetInfo, statementList[i]);
+    }
+  }
 })
 
 function createWindow () {

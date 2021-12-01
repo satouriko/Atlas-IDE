@@ -1,6 +1,6 @@
 /**
  * @license
- * 
+ *
  * Copyright 2019 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,60 +31,104 @@ import * as Blockly from 'blockly/core';
 import '../fields/BlocklyReactField';
 import '../fields/DateField';
 
-var testReactField = {
-  "type": "test_react_field",
-  "message0": "custom field %1",
-  "args0": [
-    {
-      "type": "field_react_component",
-      "name": "FIELD",
-      "text": "Click me"
-    },
-  ],
-  "previousStatement": null,
-  "nextStatement": null,
-};
+export function parseAPI (apiString) {
+  // BUZZ:[Input1,int, NULL|Input2,int, NULL]:(Output,int, NULL)
+  const regex = /\w+\s*:\s*\[(?:\s*(\w+)\s*,\s*(\w+)\s*,\s*\w+\s*\|)*(?:\s*(\w+)\s*,\s*(\w+)\s*,\s*\w+\s*)]:\(\s*\w+\s*,\s*(\w+)\s*,\s*\w+\s*\)/
+  const test = regex.exec(apiString)
+  if (!test) {
+    console.error('Cannot parse API string: ', apiString)
+    return
+  }
+  test.shift()
+  const outputType = test.pop()
+  const inputs = []
+  for (let i = 0; i + 1 < test.length; i += 2) {
+    if (test[i] !== undefined) {
+      inputs.push({
+        name: test[i],
+        type: test[i+1]
+      })
+    }
+  }
+  return {
+    inputs,
+    outputType
+  }
+}
 
-Blockly.Blocks['test_react_field'] = {
+export function makeCustomBlocks (tweetInfo) {
+  const services = Object.keys(tweetInfo.Service)
+    .filter((key) => parseAPI(tweetInfo.Service[key].API))
+    .map((key) => ({
+      ...tweetInfo.Service[key],
+      id: key,
+      io: parseAPI(tweetInfo.Service[key].API)
+    }))
+
+  for (const service of services) {
+    Blockly.Blocks[`Service_` + service.id] = {
+      init: function () {
+        this.appendDummyInput("NAME")
+          .appendField(service.id)
+        for (const input of service.io.inputs) {
+          let type = input.type
+          if (type === 'int' || type === 'float') {
+            type = 'Number'
+          }
+          this.appendValueInput(input.name)
+            .setCheck(type)
+            .appendField(input.name);
+        }
+        let type = service.io.outputType
+        if (type === 'int' || type === 'float') {
+          type = 'Number'
+        }
+        this.setOutput(true, type);
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+      }
+    }
+  }
+}
+
+Blockly.Blocks['recipe'] = {
   init: function() {
-    this.jsonInit(testReactField);
-    this.setStyle('loop_blocks');
+    this.appendStatementInput("NAME")
+      .setCheck(null)
+      .appendField("")
+      .appendField("Recipe");
+    this.setColour(330);
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
-var reactDateField = {
-  "type": "test_react_date_field",
-  "message0": "date field %1",
-  "args0": [
-    {
-      "type": "field_react_date",
-      "name": "DATE",
-      "date": "01/01/2020"
-    },
-  ],
-  "previousStatement": null,
-  "nextStatement": null,
-};
-
-Blockly.Blocks['test_react_date_field'] = {
-  init: function() {
-    this.jsonInit(reactDateField);
-    this.setStyle('loop_blocks');
+Blockly.Blocks['ignore'] = {
+  init: function () {
+    this.appendValueInput("NAME")
+      .setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+    this.setColour(160);
   }
-};
+}
 
-var service = {
-  "type": "service",
-  "message0": "service",
-  "output": null,
-  "colour": 230,
-  "tooltip": "",
-  "helpUrl": ""
-};
-
-Blockly.Blocks['service'] = {
+Blockly.Blocks['cond_eval'] = {
   init: function() {
-    this.jsonInit(service);
-    this.setStyle('loop_blocks');
+    this.appendValueInput("NAME")
+      .setCheck(null)
+      .appendField("if");
+    this.appendStatementInput("NAME")
+      .setCheck(null)
+      .appendField("then");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(160);
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };

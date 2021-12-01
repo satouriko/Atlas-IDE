@@ -11,24 +11,6 @@ import {
 import * as React from 'react'
 import { useState } from 'react'
 
-const rows = [
-  {
-    id: 'a' ,
-    name: 'Load balancer 1',
-    status: 'Disabled'
-  },
-  {
-    id: 'b',
-    name: 'Load balancer 2',
-    status: 'Starting'
-  },
-  {
-    id: 'c',
-    name: 'Load balancer 3',
-    status: 'Active'
-  }
-]
-
 const headers = [
   {
     key: 'Thing ID',

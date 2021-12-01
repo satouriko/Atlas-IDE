@@ -31,7 +31,6 @@ export function Recipe(props) {
                           }}
                           initialXml={`
 <xml xmlns="http://www.w3.org/1999/xhtml">
-<block type="controls_ifelse" x="0" y="0"></block>
 </xml>
       `}>
           <Category name="Logic">

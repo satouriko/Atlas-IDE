@@ -4,37 +4,47 @@ import {
   DataTable, Table, TableHead, TableRow, TableBody, TableCell, TableHeader,
 } from 'carbon-components-react'
 
-const rows = [
-  {
-    id: 'a',
-    name: 'Load balancer 1',
-    status: 'Disabled'
-  },
-  {
-    id: 'b',
-    name: 'Load balancer 2',
-    status: 'Starting'
-  },
-  {
-    id: 'c',
-    name: 'Load balancer 3',
-    status: 'Active'
-  }
-]
-
 const headers = [
   {
-    key: 'name',
-    header: 'Name'
+    key: 'Space ID',
+    header: 'Space ID'
   },
   {
-    key: 'status',
-    header: 'Status'
+    key: 'Thing ID',
+    header: 'Thing ID'
+  },
+  {
+    key: 'Name',
+    header: 'Name',
+  },
+  {
+    key: 'Description',
+    header: 'Description'
+  },
+  {
+    key: 'Model',
+    header: 'Model'
+  },
+  {
+    key: 'OS',
+    header: 'OS'
+  },
+  {
+    key: 'Owner',
+    header: 'Owner'
+  },
+  {
+    key: 'Vendor',
+    header: 'Vendor'
   }
 ]
 
 export function Things (props) {
-  console.log(1, props.tweetInfo)
+  const { tweetInfo } = props
+  const rows = Object.keys(tweetInfo.Identity_Thing).map(key => ({
+    id: key,
+    ...tweetInfo.Identity_Thing[key]
+  }))
   return (
     <DataTable rows={rows} headers={headers}>
       {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (

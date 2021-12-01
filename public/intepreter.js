@@ -133,9 +133,9 @@ async function executeStatement(tweetInfo, statement){
             result = false;
             if(pass) {
                 let thenStatement2 = executeStatement(tweetInfo, statement.thenStatement);
-                if(typeof ifStatement2 == 'boolean') {
-                    result  = ifStatement2;
-                }else if(ifStatement2.Status == 'Successful') {
+                if(typeof thenStatement2 == 'boolean') {
+                    result  = thenStatement2;
+                }else if(thenStatement2.Status == 'Successful') {
                     result = true;
                 }
             }

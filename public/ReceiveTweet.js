@@ -45,7 +45,7 @@ function startReceiveTweet(tweetInfo){
                 break;
             case 'Relationship':
                 console.log('relationship!!');
-                tweetInfo.Service[tweetObject['Thing ID'] + tweetObject['Entity ID'] + tweetObject['Name']] = tweetObject;
+                tweetInfo.Relationship[tweetObject['Thing ID'] + tweetObject['Entity ID'] + tweetObject['Name']] = tweetObject;
                 break;
             default:
                 break;

@@ -1,7 +1,7 @@
 import './App.css'
 import 'carbon-components/css/carbon-components.css'
 import {
-  Tabs, Tab, Dropdown, DataTable,
+  Button, Tabs, Tab, Dropdown, DataTable,
   Table, TableHead, TableRow, TableBody, TableCell, TableHeader,
   Grid, Row, Column
 } from 'carbon-components-react'
@@ -19,6 +19,59 @@ import { Recipe } from './components/Recipe'
 
 const electron = window.require('electron')
 
+function testButton(){
+  console.log('test');
+  let statementList = [
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'LED',
+      serviceName: 'TurnOn',
+      serviceInput: [0]
+    },
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [1000, 5]
+    }
+  ];
+  electron.ipcRenderer.on('runApp-finish', (event, arg) => {
+      console.log('finish running statement ' + arg);
+      })
+      electron.ipcRenderer.send('runApp', {
+        appName: 'testApp',
+        statementList
+      })
+}
+
+function testButton2(){
+  console.log('test');
+  let statementList = [
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'LED',
+      serviceName: 'TurnOff',
+      serviceInput: [0]
+    },
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [2000, 3]
+    }
+  ];
+  electron.ipcRenderer.on('runApp-finish', (event, arg) => {
+      console.log('finish running statement ' + arg);
+      })
+      electron.ipcRenderer.send('runApp', {
+        appName: 'testApp',
+        statementList
+      })
+}
 
 function App () {
   const [tweetInfo, setTweetInfo] = useState({
@@ -60,6 +113,12 @@ function App () {
         </Tab>
         <Tab id="tab-5" label="Application">
           <p>Content for third tab goes here.</p>
+          <Button onClick = {testButton}>
+          BuzzAndLightOn
+          </Button>
+          <Button onClick = {testButton2}>
+          BuzzAndLightOff
+          </Button>
         </Tab>
       </Tabs>
     </div>

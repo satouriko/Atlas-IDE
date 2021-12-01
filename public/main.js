@@ -65,12 +65,19 @@ let appInfo = {
 
 ipcMain.on('saveApp', (event, appInfo) => {
   if(AppList[appInfo.appName] === undefined){
-    AppList[appInfo.appName] = {};
+    AppList[appInfo.appName] = {
+      appName: appInfo.appName,
+      statementList: [],
+      canExecute: true
+    };
   }
   AppList[appInfo.appName].statementList = appInfo.statementList;
   try {
-    fs.writeFileSync(appInfo.fileName, JSON.stringify(AppList[appInfo.appName]), {flag: 'r+'} );
-    event.sender.send('saveApp-finish', null);
+    fs.writeFile(appInfo.fileName, JSON.stringify(AppList[appInfo.appName]), function (err) {
+      if (err) throw err;
+      console.log('File is created successfully.');
+      event.sender.send('saveApp-finish', null);
+    });
   } catch (err) {
     console.error(err)
   }

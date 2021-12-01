@@ -11,7 +11,7 @@ function startReceiveTweet(tweetInfo){
         console.log('UDP Client listening on ' + address.address + ":" + address.port);
         client.setBroadcast(true)
         client.setMulticastTTL(128); 
-        client.addMembership('232.1.1.1', '10.20.23.61');
+        client.addMembership('232.1.1.1', HOST);
     });
 
     client.on('message', function (message, remote) {   

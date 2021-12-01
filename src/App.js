@@ -35,10 +35,10 @@ function App () {
           <Things tweetInfo={tweetInfo} />
         </Tab>
         <Tab id="tab-2" label="Services">
-          <Services />
+          <Services tweetInfo={tweetInfo} />
         </Tab>
         <Tab id="tab-3" label="Relationships">
-          <Relationships />
+          <Relationships tweetInfo = {tweetInfo} />
         </Tab>
         <Tab id="tab-4" label="Recipes">
           <p>Content for third tab goes here.</p>

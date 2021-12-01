@@ -11,7 +11,11 @@ let tweetInfo = {
   Identity_Entity: {},
   Identity_Thing: {},
   Service: {},
+<<<<<<< HEAD
+  Relationship: {},
+=======
   Relationship: {}
+>>>>>>> 94ab8dd65a17dc14ba37720278def0dfa6ab252d
 };
 
 ipcMain.on('tweetMessage', (event, arg) => {
@@ -19,6 +23,10 @@ ipcMain.on('tweetMessage', (event, arg) => {
   // MessagePortMain.
   // console.log(arg);
   event.sender.send('tweetMessage-reply', tweetInfo);
+})
+
+ipcMain.on('runApp', (event, statementList) => {
+  
 })
 
 function createWindow () {

@@ -9,10 +9,11 @@ import {
   TableRow
 } from 'carbon-components-react'
 import * as React from 'react'
+import { useState } from 'react'
 
 const rows = [
   {
-    id: 'a',
+    id: 'a' ,
     name: 'Load balancer 1',
     status: 'Disabled'
   },
@@ -30,30 +31,66 @@ const rows = [
 
 const headers = [
   {
-    key: 'name',
+    key: 'Thing ID',
+    header: 'Thing ID'
+  },
+  {
+    key: 'Entity ID',
+    header: 'Entity ID'
+  },
+  {
+    key: 'Name',
     header: 'Name'
   },
   {
-    key: 'status',
-    header: 'Status'
-  }
+    key: 'Space ID',
+    header: 'Space ID'
+  },
+  {
+    key: 'Type',
+    header: 'Type'
+  },
+  {
+    key: 'Description',
+    header: 'Description'
+  },
+  {
+    key: 'Keywords',
+    header: 'Keywords'
+  },
+  {
+    key: 'AppCategory',
+    header: 'AppCategory'
+  },
+  {
+    key: 'Vendor',
+    header: 'Vendor'
+  },
 ]
 
-export function Services () {
+export function Services (props) {
+  const { tweetInfo } = props
+  const [filterKey, setFilterKey] = useState('All')
+  //const rows = Object.values(tweetInfo.Service).map(row => ({id: row['name']}))
+  const rows = Object.keys(tweetInfo.Service).map(key => ({id: key, ...tweetInfo.Service[key]}))
+    .filter((row) => row['Thing ID'] === filterKey || filterKey === 'All')
+  const items = [
+    { id: 'All', text: 'All' },
+    ...Object.keys(tweetInfo.Identity_Thing).map(key => ({id: key, text: tweetInfo.Identity_Thing[key]['Thing ID']}))
+  ]
+  //console.log(1, props.tweetInfo)
   return (
     <>
       <Dropdown
-        ariaLabel="Dropdown"
+        initialSelectedItem={{ id: 'All', text: 'All' }}
+        ariaLabel="All"
         id="carbon-dropdown-example"
         className="dropdown"
-        items={[
-          { id: 'option-0', text: 'Option 0' },
-          { id: 'option-1', text: 'Option 1' },
-          { id: 'option-2', text: 'Option 2' }
-        ]}
+        items={items}
         itemToString={(item) => (item ? item.text : '')}
         label="Dropdown menu options"
-        titleText="Dropdown title"
+        titleText="Thing of Services"
+        onChange={(e) => setFilterKey(e.selectedItem.id)}
       />
       <DataTable rows={rows} headers={headers}>
         {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (

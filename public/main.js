@@ -83,19 +83,21 @@ ipcMain.on('saveApp', (event, appInfo) => {
   }
 })
 
-ipcMain.on('loadApp', async (event, fileName) => {
+ipcMain.on('loadApp', (event, fileName) => {
   try {
-    let appObj = await fs.readFileSync(fileName);
-    targetApp = JSON.parse(appObj);
-    AppList[targetApp.appName] = targetApp;
-    event.sender.send('loadApp-finish', null);
+    fs.readFile(fileName, (err, data)=>{
+      if (err) throw err;
+      targetApp = JSON.parse(data);
+      AppList[targetApp.appName] = targetApp;
+      event.sender.send('loadApp-finish', null);
+    });
   } catch (err) {
     console.error(err);
   }
 })
 
 ipcMain.on('getApp', (event, appName)=>{
-  event.sender.send('getApp-reply', appList[appName]);
+  event.sender.send('getApp-reply', AppList[appName]);
 })
 
 ipcMain.on('syncApp', (event, appInfo)=>{

@@ -54,6 +54,17 @@ ipcMain.on('stopApp', (event, appName)=>{
   event.sender.send('stopApp-finish', null);
 })
 
+ipcMain.on('getApp', (event, appName)=>{
+  event.sender.send('getApp-reply', appList[appName]);
+})
+
+ipcMain.on('syncApp', (event, appInfo)=>{
+  if(AppList.hasAttribute(appInfo.appName)){
+    AppList[appInfo.appName].statementList = appInfo.statementList;
+    event.sender.send('syncApp-finish', null);
+  }
+})
+
 function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({

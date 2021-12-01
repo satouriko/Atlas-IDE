@@ -33,17 +33,24 @@ import '../fields/DateField';
 
 
 Blockly.JavaScript['cond_eval'] = function(block) {
-  var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
-  var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
+  const value_name = JSON.parse(Blockly.JavaScript.valueToCode(block, 'Cond', Blockly.JavaScript.ORDER_ATOMIC));
+  let statements_name = Blockly.JavaScript.statementToCode(block, 'Eval');
+  statements_name = '[' + statements_name.replace(/}\{/g, '},{') + ']';
+  statements_name = JSON.parse(statements_name)
+  let statement = {
+    type: 'ifthen',//service, relationship or ifthen
+    ifStatement: value_name,
+    thenStatement: statements_name
+  }
   // TODO: Assemble JavaScript into code variable.
-  var code = 'if (' + value_name + ')' + '\nthen {' + statements_name + '};\n';
+  const code = JSON.stringify(statement);
   return code;
 };
 
 Blockly.JavaScript['recipe'] = function(block) {
-  var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
+  const statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
   // TODO: Assemble JavaScript into code variable.
-  var code = '{ ' + statements_name + ' }';
+  const code = '[' + (statements_name.replace(/}\{/g, '},{')).trim() + ']';
   return code;
 };
 Blockly.JavaScript['ignore'] = function(block) {
@@ -112,12 +119,23 @@ export function makeCustomBlocks (tweetInfo) {
       }
     }
     Blockly.JavaScript[`Service_` + service.id] = function (block) {
-      var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
+      const valueNames = service.io.inputs.map((input) => {
+        return Blockly.JavaScript.valueToCode(block, input.name, Blockly.JavaScript.ORDER_ATOMIC)
+      })
+      const statement = {
+        type: 'service',//service, relationship or ifthen
+        thingID: service['Thing ID'],//service if type is service, service1 if type is relationship
+        entityID: service['Entity ID'],
+        serviceName: service['Name'],
+        serviceInput: JSON.parse(`[${valueNames.join(',')}]`),
+      }
       // TODO: Assemble JavaScript into code variable.
-      var code = service.id + ':' + value_name.toString();
+      const code = JSON.stringify(statement)
       // TODO: Change ORDER_NONE to the correct strength.
-      return [code, Blockly.JavaScript.ORDER_NONE];
+      return [code, Blockly.JavaScript.ORDER_ATOMIC];
     };
+
+
   }
   return [
     services.map((service) => `Service_` + service.id),
@@ -181,6 +199,27 @@ Blockly.Blocks['control'] = {
   }
 }
 
+Blockly.JavaScript['control'] = function(block) {
+  const input1 = JSON.parse(Blockly.JavaScript.valueToCode(block, 'Input1', Blockly.JavaScript.ORDER_ATOMIC))
+  const input2 = JSON.parse(Blockly.JavaScript.valueToCode(block, 'Input2', Blockly.JavaScript.ORDER_ATOMIC))
+  const statement = {
+    type: 'relationship',//service, relationship or ifthen
+    thingID: input1.thingID,//service if type is service, service1 if type is relationship
+    entityID: input1.entityID,
+    serviceName: input1.serviceName,
+    serviceInput: input1.serviceName,
+    relationshipType: 'control',
+    thingID2: input2.thingID,
+    entityID2: input2.entityID,
+    serviceName2: input2.serviceName,
+    serviceInput2: input2.serviceInput,
+  }
+  // TODO: Assemble JavaScript into code variable.
+  const code = JSON.stringify(statement)
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
 Blockly.Blocks['drive'] = {
   init: function() {
     this.appendValueInput("Input1")
@@ -195,6 +234,27 @@ Blockly.Blocks['drive'] = {
     this.setHelpUrl("");
   }
 }
+
+Blockly.JavaScript['drive'] = function(block) {
+  const input1 = JSON.parse(Blockly.JavaScript.valueToCode(block, 'Input1', Blockly.JavaScript.ORDER_ATOMIC))
+  const input2 = JSON.parse(Blockly.JavaScript.valueToCode(block, 'Input2', Blockly.JavaScript.ORDER_ATOMIC))
+  const statement = {
+    type: 'relationship',//service, relationship or ifthen
+    thingID: input1.thingID,//service if type is service, service1 if type is relationship
+    entityID: input1.entityID,
+    serviceName: input1.serviceName,
+    serviceInput: input1.serviceName,
+    relationshipType: 'drive',
+    thingID2: input2.thingID,
+    entityID2: input2.entityID,
+    serviceName2: input2.serviceName,
+    serviceInput2: input2.serviceInput,
+  }
+  // TODO: Assemble JavaScript into code variable.
+  const code = JSON.stringify(statement)
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
 
 Blockly.Blocks['support'] = {
   init: function() {
@@ -211,6 +271,27 @@ Blockly.Blocks['support'] = {
   }
 }
 
+Blockly.JavaScript['support'] = function(block) {
+  const input1 = JSON.parse(Blockly.JavaScript.valueToCode(block, 'Input1', Blockly.JavaScript.ORDER_ATOMIC))
+  const input2 = JSON.parse(Blockly.JavaScript.valueToCode(block, 'Input2', Blockly.JavaScript.ORDER_ATOMIC))
+  const statement = {
+    type: 'relationship',//service, relationship or ifthen
+    thingID: input1.thingID,//service if type is service, service1 if type is relationship
+    entityID: input1.entityID,
+    serviceName: input1.serviceName,
+    serviceInput: input1.serviceName,
+    relationshipType: 'support',
+    thingID2: input2.thingID,
+    entityID2: input2.entityID,
+    serviceName2: input2.serviceName,
+    serviceInput2: input2.serviceInput,
+  }
+  // TODO: Assemble JavaScript into code variable.
+  const code = JSON.stringify(statement)
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
 Blockly.Blocks['extend'] = {
   init: function() {
     this.appendValueInput("Input1")
@@ -225,4 +306,25 @@ Blockly.Blocks['extend'] = {
     this.setHelpUrl("");
   }
 }
+
+Blockly.JavaScript['extend'] = function(block) {
+  const input1 = JSON.parse(Blockly.JavaScript.valueToCode(block, 'Input1', Blockly.JavaScript.ORDER_ATOMIC))
+  const input2 = JSON.parse(Blockly.JavaScript.valueToCode(block, 'Input2', Blockly.JavaScript.ORDER_ATOMIC))
+  const statement = {
+    type: 'relationship',//service, relationship or ifthen
+    thingID: input1.thingID,//service if type is service, service1 if type is relationship
+    entityID: input1.entityID,
+    serviceName: input1.serviceName,
+    serviceInput: input1.serviceName,
+    relationshipType: 'extend',
+    thingID2: input2.thingID,
+    entityID2: input2.entityID,
+    serviceName2: input2.serviceName,
+    serviceInput2: input2.serviceInput,
+  }
+  // TODO: Assemble JavaScript into code variable.
+  const code = JSON.stringify(statement)
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
 

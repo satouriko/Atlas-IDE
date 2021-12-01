@@ -35,14 +35,20 @@ export function parseAPI (apiString) {
   // BUZZ:[Input1,int, NULL|Input2,int, NULL]:(Output,int, NULL)
   const regex = /\w+\s*:\s*\[(?:\s*(\w+)\s*,\s*(\w+)\s*,\s*\w+\s*\|)*(?:\s*(\w+)\s*,\s*(\w+)\s*,\s*\w+\s*)]:\(\s*\w+\s*,\s*(\w+)\s*,\s*\w+\s*\)/
   const test = regex.exec(apiString)
+  if (!test) {
+    console.error('Cannot parse API string: ', apiString)
+    return
+  }
   test.shift()
   const outputType = test.pop()
   const inputs = []
   for (let i = 0; i + 1 < test.length; i += 2) {
-    inputs.push({
-      name: test[i],
-      type: test[i+1]
-    })
+    if (test[i] !== undefined) {
+      inputs.push({
+        name: test[i],
+        type: test[i+1]
+      })
+    }
   }
   return {
     inputs,
@@ -50,7 +56,40 @@ export function parseAPI (apiString) {
   }
 }
 
-export function makeCustomBlocks () {
+export function makeCustomBlocks (tweetInfo) {
+  const services = Object.keys(tweetInfo.Service)
+    .filter((key) => parseAPI(tweetInfo.Service[key].API))
+    .map((key) => ({
+      ...tweetInfo.Service[key],
+      id: key,
+      io: parseAPI(tweetInfo.Service[key].API)
+    }))
+
+  for (const service of services) {
+    Blockly.Blocks[`Service_` + service.id] = {
+      init: function () {
+        this.appendDummyInput("NAME")
+          .appendField(service.id)
+        for (const input of service.io.inputs) {
+          let type = input.type
+          if (type === 'int' || type === 'float') {
+            type = 'Number'
+          }
+          this.appendValueInput(input.name)
+            .setCheck(type)
+            .appendField(input.name);
+        }
+        let type = service.io.outputType
+        if (type === 'int' || type === 'float') {
+          type = 'Number'
+        }
+        this.setOutput(true, type);
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+      }
+    }
+  }
 
   Blockly.Blocks['ignore'] = {
     init: function () {
@@ -63,19 +102,4 @@ export function makeCustomBlocks () {
       this.setHelpUrl("");
     }
   }
-
-  Blockly.Blocks['service1'] = {
-    init: function() {
-      this.appendValueInput("Input1")
-        .setCheck("Number")
-        .appendField("Input1");
-      this.appendValueInput("Input2")
-        .setCheck("Number")
-        .appendField("Input2");
-      this.setOutput(true, null);
-      this.setColour(230);
-      this.setTooltip("");
-      this.setHelpUrl("");
-    }
-  };
 }

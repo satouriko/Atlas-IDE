@@ -56,7 +56,7 @@ function App () {
             window.dispatchEvent(new Event('resize'))
           }
         }}>
-          <Recipe />
+          <Recipe tweetInfo={tweetInfo} />
         </Tab>
         <Tab id="tab-5" label="Application">
           <p>Content for third tab goes here.</p>

@@ -2,19 +2,43 @@ import BlocklyComponent, { Block, Value, Field, Shadow, Category } from '../Bloc
 import BlocklyJS from 'blockly/javascript';
 import { makeCustomBlocks } from '../blocks/customblocks';
 import '../generator/generator';
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import * as Blockly from 'blockly/core'
 
 export function Recipe(props) {
   const { tweetInfo } = props
+  const [serviceBlockIds, setServiceBlockIds] = useState([])
   const [services, setServices] = useState([])
-  useEffect(() => {
-    makeCustomBlocks(tweetInfo)
-    setServices(Object.keys(Blockly.Blocks).filter(blockType => blockType.startsWith('Service_')))
+  const relationships = Object.keys(tweetInfo.Relationship).map((key) => ({
+    ...tweetInfo.Relationship[key],
+    id: key
+  }))
+  const preRelationships = useMemo(() => {
+    const r = []
+    for (const relationship of relationships) {
+      const fs = services.find((s) => s.Name === relationship['FS name'])
+      const ss = services.find((s) => s.Name === relationship['SS name'])
+      if (fs && ss) {
+        r.push({
+          ...relationship,
+          fs,
+          ss
+        })
+      }
+    }
     setTimeout(() => {
-      simpleWorkspace.current.refreshToolbox()
+      simpleWorkspace.current?.refreshToolbox()
     })
-  }, [Object.keys(tweetInfo.Service).join('\n')])
+    return r
+  }, [Object.keys(tweetInfo.Relationship).sort().join('\n'), services.map(s => s.Name).sort().join('\n')])
+  useEffect(() => {
+    const [blockIds, services] = makeCustomBlocks(tweetInfo)
+    setServiceBlockIds(blockIds)
+    setServices(services)
+    setTimeout(() => {
+      simpleWorkspace.current?.refreshToolbox()
+    })
+  }, [Object.keys(tweetInfo.Service).sort().join('\n')])
   const simpleWorkspace = useRef()
   const generateCode = () => {
     const code = BlocklyJS.workspaceToCode(
@@ -38,22 +62,37 @@ export function Recipe(props) {
 </xml>
       `}>
           <Category name="Logic">
-            <Block type="recipe"></Block>
-            <Block type="ignore"></Block>
-            <Block type="cond_eval"></Block>
+            <Block type="recipe" />
+            <Block type="ignore" />
+            <Block type="cond_eval" />
           </Category>
           <Category name="Services">
-            {services.map((serviceKey) => (
+            {serviceBlockIds.map((serviceKey) => (
               <Block type={serviceKey} key={serviceKey} />
             ))}
           </Category>
-          <Category name="Relationships"></Category>
+          <Category name="Relationships">
+            <Block type="control" />
+            <Block type="drive" />
+            <Block type="support" />
+            <Block type="extend" />
+            {preRelationships.map((relationship) => (
+              <Block type={relationship.Type} key={relationship.id}>
+                <Value name="Input1">
+                  <Block type={`Service_${relationship.fs.id}`} />
+                </Value>
+                <Value name="Input2">
+                  <Block type={`Service_${relationship.ss.id}`} />
+                </Value>
+              </Block>
+            ))}
+          </Category>
           <Category name="Literals">
             <Block type="math_number">
               <Field name="NUM">0</Field>
             </Block>
             <Block type="text">
-              <Field name="TEXT"></Field>
+              <Field name="TEXT" />
             </Block>
             <Block type="logic_boolean">
               <Field name="BOOL">TRUE</Field>

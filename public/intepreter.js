@@ -134,12 +134,14 @@ async function executeStatement(tweetInfo, statement){
                 }
             }catch(err) {
                 console.log(err);
+            }finally {
+                console.log("if exit\n");
             }
             result = false;
             if(pass) {
-                console.log(pass);
+                console.log("in sec loop\n");
                 try {
-                    let thenStatement2 = executeStatement(tweetInfo, statement.thenStatement);
+                    let thenStatement2 = await executeStatement(tweetInfo, statement.thenStatement);
                     if(typeof thenStatement2 == 'boolean') {
                         result  = thenStatement2;
                     }else if(thenStatement2.Status == 'Successful') {

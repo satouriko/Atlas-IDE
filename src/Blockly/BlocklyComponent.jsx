@@ -69,7 +69,6 @@ class BlocklyComponent extends React.Component {
     }
 
     refreshToolbox () {
-        console.log(this.toolbox.current.outerHTML)
         this.primaryWorkspace.updateToolbox(this.toolbox.current.outerHTML);
     }
 

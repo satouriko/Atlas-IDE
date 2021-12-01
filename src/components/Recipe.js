@@ -37,7 +37,9 @@ export function Recipe(props) {
 </xml>
       `}>
           <Category name="Logic">
+            <Block type="recipe"></Block>
             <Block type="ignore"></Block>
+            <Block type="cond_eval"></Block>
           </Category>
           <Category name="Services">
             {services.map((serviceKey) => (

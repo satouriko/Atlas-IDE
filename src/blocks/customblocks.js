@@ -90,16 +90,45 @@ export function makeCustomBlocks (tweetInfo) {
       }
     }
   }
+}
 
-  Blockly.Blocks['ignore'] = {
-    init: function () {
-      this.appendValueInput("NAME")
-        .setCheck(null);
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
-      this.setColour(230);
-      this.setTooltip("");
-      this.setHelpUrl("");
-    }
+Blockly.Blocks['recipe'] = {
+  init: function() {
+    this.appendStatementInput("NAME")
+      .setCheck(null)
+      .appendField("")
+      .appendField("Recipe");
+    this.setColour(330);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['ignore'] = {
+  init: function () {
+    this.appendValueInput("NAME")
+      .setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+    this.setColour(160);
   }
 }
+
+Blockly.Blocks['cond_eval'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+      .setCheck(null)
+      .appendField("if");
+    this.appendStatementInput("NAME")
+      .setCheck(null)
+      .appendField("then");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(160);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};

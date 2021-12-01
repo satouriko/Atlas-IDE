@@ -106,7 +106,7 @@ export function makeCustomBlocks (tweetInfo) {
           type = 'Number'
         }
         this.setOutput(true, type);
-        this.setColour(230);
+        this.setColour(255);
         this.setTooltip("");
         this.setHelpUrl("");
       }
@@ -119,6 +119,10 @@ export function makeCustomBlocks (tweetInfo) {
       return [code, Blockly.JavaScript.ORDER_NONE];
     };
   }
+  return [
+    services.map((service) => `Service_` + service.id),
+    services
+  ]
 }
 
 Blockly.Blocks['recipe'] = {
@@ -148,10 +152,10 @@ Blockly.Blocks['ignore'] = {
 
 Blockly.Blocks['cond_eval'] = {
   init: function() {
-    this.appendValueInput("NAME")
+    this.appendValueInput("Cond")
       .setCheck(null)
       .appendField("if");
-    this.appendStatementInput("NAME")
+    this.appendStatementInput("Eval")
       .setCheck(null)
       .appendField("then");
     this.setPreviousStatement(true, null);
@@ -161,3 +165,64 @@ Blockly.Blocks['cond_eval'] = {
     this.setHelpUrl("");
   }
 };
+
+Blockly.Blocks['control'] = {
+  init: function() {
+    this.appendValueInput("Input1")
+      .setCheck(null)
+      .appendField("if");
+    this.appendValueInput("Input2")
+      .setCheck(null)
+      .appendField("then");
+    this.setOutput(true, null);
+    this.setColour(65);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+}
+
+Blockly.Blocks['drive'] = {
+  init: function() {
+    this.appendValueInput("Input1")
+      .setCheck(null)
+      .appendField("use");
+    this.appendValueInput("Input2")
+      .setCheck(null)
+      .appendField("todo");
+    this.setOutput(true, null);
+    this.setColour(65);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+}
+
+Blockly.Blocks['support'] = {
+  init: function() {
+    this.appendValueInput("Input1")
+      .setCheck(null)
+      .appendField("before");
+    this.appendValueInput("Input2")
+      .setCheck(null)
+      .appendField("check on");
+    this.setOutput(true, null);
+    this.setColour(65);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+}
+
+Blockly.Blocks['extend'] = {
+  init: function() {
+    this.appendValueInput("Input1")
+      .setCheck(null)
+      .appendField("do");
+    this.appendValueInput("Input2")
+      .setCheck(null)
+      .appendField("while doing");
+    this.setOutput(true, null);
+    this.setColour(65);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+}
+

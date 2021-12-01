@@ -198,6 +198,11 @@ function testButton2(){
   })
 }
 
+function stopButton(){
+  console.log('stop');
+  electron.ipcRenderer.send('stopApp', 'testApp2');
+}
+
 function testButton3(){
   console.log(statementList2);
   electron.ipcRenderer.on('runApp-finish', (event, arg) => {
@@ -265,6 +270,9 @@ function App () {
           <p>{JSON.stringify(statementList2)}</p>
           <Button onClick = {testButton2}>
           BuzzAndLightOff
+          </Button>
+          <Button onClick = {stopButton}>
+          Stop this app
           </Button>
           <p>{JSON.stringify(statementList3)}</p>
           <Button onClick = {testButton3}>

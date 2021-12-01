@@ -19,6 +19,7 @@ import { Recipe } from './components/Recipe'
 
 const electron = window.require('electron')
 
+
 function App () {
   const [tweetInfo, setTweetInfo] = useState({
     Identity_Language: {},
@@ -31,7 +32,7 @@ function App () {
     setInterval(() => {
       electron.ipcRenderer.on('tweetMessage-reply', (event, arg) => {
         setTweetInfo(arg)
-        console.log(arg)
+        //console.log(arg)
       })
       electron.ipcRenderer.send('tweetMessage', 'sendstring')
     }, 2500)
@@ -49,7 +50,7 @@ function App () {
           <Relationships tweetInfo = {tweetInfo} />
         </Tab>
         <Tab id="tab-4" label="Recipes" onClick={() => {
-          window.dispatchEvent(new Event('resize'))
+          //window.dispatchEvent(new Event('resize'))
         }}>
           <Recipe />
         </Tab>

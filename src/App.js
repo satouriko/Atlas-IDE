@@ -37,6 +37,7 @@ function App () {
       electron.ipcRenderer.send('tweetMessage', 'sendstring')
     }, 2500)
   }, [])
+  const [firstTimeResize, setFirstTimeResize] = useState(false)
   return (
     <div className="App">
       <Tabs>
@@ -50,7 +51,10 @@ function App () {
           <Relationships tweetInfo = {tweetInfo} />
         </Tab>
         <Tab id="tab-4" label="Recipes" onClick={() => {
-          //window.dispatchEvent(new Event('resize'))
+          setFirstTimeResize(true)
+          if (!firstTimeResize) {
+            window.dispatchEvent(new Event('resize'))
+          }
         }}>
           <Recipe />
         </Tab>

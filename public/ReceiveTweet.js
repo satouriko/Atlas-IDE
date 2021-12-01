@@ -1,3 +1,5 @@
+const {executeStatement} = require('./intepreter.js');
+
 function startReceiveTweet(tweetInfo){
     var PORT = 1235;
     var HOST = '10.20.23.65';
@@ -20,6 +22,7 @@ function startReceiveTweet(tweetInfo){
         switch (tweetObject['Tweet Type']) {
             case 'Identity_Language':
                 tweetInfo.Identity_Language[tweetObject['Thing ID']] = tweetObject;
+                tweetInfo.Identity_Language[tweetObject['Thing ID']].IP = remote.address;
                 break;
             case 'Identity_Entity':
                 tweetInfo.Identity_Entity[tweetObject['Thing ID'] + tweetObject['ID']] = tweetObject;
@@ -28,12 +31,21 @@ function startReceiveTweet(tweetInfo){
                 tweetInfo.Identity_Thing[tweetObject['Thing ID']] = tweetObject;
                 break;
             case 'Service':
+                console.log('Service!!');
                 tweetInfo.Service[tweetObject['Thing ID'] + tweetObject['Entity ID'] + tweetObject['Name']] = tweetObject;
+                if(tweetObject['Name'] == 'TurnOff'){
+                    executeStatement(tweetInfo, {
+                        type: 'service',
+                        thingID: tweetObject['Thing ID'],
+                        entityID: tweetObject['Entity ID'],
+                        serviceName: tweetObject['Name'],
+                        serviceInput: [0]
+                    });
+                }
                 break;
             default:
                 break;
         }
-        //console.log(tweetInfo);
     });
 
     client.bind(PORT, HOST);

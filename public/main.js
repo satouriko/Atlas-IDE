@@ -4,6 +4,8 @@ const { startReceiveTweet } = require('./ReceiveTweet.js')
 
 let mainWindow;
 
+let canExcute = true;
+
 let tweetInfo = {
   Identity_Language: {},
   Identity_Entity: {},

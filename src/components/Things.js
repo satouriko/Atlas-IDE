@@ -33,7 +33,8 @@ const headers = [
   }
 ]
 
-export function Things () {
+export function Things (props) {
+  console.log(1, props.tweetInfo)
   return (
     <DataTable rows={rows} headers={headers}>
       {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (

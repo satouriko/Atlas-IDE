@@ -31,7 +31,7 @@ function startReceiveTweet(tweetInfo){
                 tweetInfo.Identity_Thing[tweetObject['Thing ID']] = tweetObject;
                 break;
             case 'Service':
-                console.log('Service!!');
+                //console.log('Service!!');
                 tweetInfo.Service[tweetObject['Thing ID'] + tweetObject['Entity ID'] + tweetObject['Name']] = tweetObject;
                 if(tweetObject['Name'] == 'TurnOff') {
                     executeStatement(tweetInfo, {
@@ -44,7 +44,7 @@ function startReceiveTweet(tweetInfo){
                 }
                 break;
             case 'Relationship':
-                console.log('relationship!!');
+                //console.log('relationship!!');
                 tweetInfo.Relationship[tweetObject['Thing ID'] + tweetObject['Entity ID'] + tweetObject['Name']] = tweetObject;
                 break;
             default:

@@ -21,6 +21,10 @@ ipcMain.on('tweetMessage', (event, arg) => {
   event.sender.send('tweetMessage-reply', tweetInfo);
 })
 
+ipcMain.on('runApp', (event, statementList) => {
+  
+})
+
 function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({

@@ -23,11 +23,18 @@ ipcMain.on('tweetMessage', (event, arg) => {
 })
 
 ipcMain.on('runApp', (event, statementList) => {
+  canExcute = true;
   for(let i = 0; i < statementList.length; i++){
     if(canExcute){
       executeStatement(tweetInfo, statementList[i]);
     }
+    event.sender.send('runApp-finish', i);
   }
+})
+
+ipcMain.on('stopApp', (event, arg)=>{
+  canExcute = false;
+  event.sender.send('stopApp-finish', null);
 })
 
 function createWindow () {

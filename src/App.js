@@ -49,6 +49,83 @@ const electron = window.require('electron')
       entityID: 'BUZZER',
       serviceName: 'BUZZ',
       serviceInput: [2000, 3]
+    },
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [500, 5]
+    },
+        {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [2000, 3]
+    },
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [500, 5]
+    },
+        {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [2000, 3]
+    },
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [500, 5]
+    },
+        {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [2000, 3]
+    },
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [500, 5]
+    },
+        {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [2000, 3]
+    },
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [500, 5]
+    },
+        {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [2000, 3]
+    },
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [500, 5]
     }
   ];
 

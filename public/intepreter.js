@@ -123,7 +123,7 @@ async function executeStatement(tweetInfo, statement){
             }
             return result;
         case 'ifThen':
-            let ifStatement1 = executeStatement(tweetInfo, statement.ifStatement);
+            let ifStatement1 = await executeStatement(tweetInfo, statement.ifStatement);
             pass = false;
             if(typeof ifStatement1 == 'boolean') {
                 pass  = ifStatement1;

@@ -44,7 +44,11 @@ export function Things (props) {
   const rows = Object.keys(tweetInfo.Identity_Thing).map(key => ({
     id: key,
     ...tweetInfo.Identity_Thing[key]
-  }))
+  })).sort(function(a, b){
+    if (a.id < b.id) { return -1; }
+    if (a.id > b.id) { return 1; }
+    return 0;
+  })
   return (
     <DataTable rows={rows} headers={headers}>
       {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (

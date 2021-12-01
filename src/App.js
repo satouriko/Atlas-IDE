@@ -128,6 +128,25 @@ const electron = window.require('electron')
       serviceInput: [500, 5]
     }
   ];
+  let statementList3 = [
+    {
+      type: 'ifThen',
+      ifStatement: {
+          type: 'service',
+          thingID: 'RPI1',
+          entityID: 'BUZZER',
+          serviceName: 'BUZZ',
+          serviceInput: [1000, 10]
+      },
+      thenStatement: {
+        type: 'service',
+        thingID: 'RPI1',
+        entityID: 'LED',
+        serviceName: 'TurnOn',
+        serviceInput: [0]
+      }
+    }
+  ];
 
 function testButton(){
   console.log(statementList1);
@@ -148,6 +167,17 @@ function testButton2(){
       electron.ipcRenderer.send('runApp', {
         appName: 'testApp2',
         statementList: statementList2
+      })
+}
+
+function testButton3(){
+  console.log(statementList2);
+  electron.ipcRenderer.on('runApp-finish', (event, arg) => {
+      console.log('finish running statement ' + arg);
+      })
+      electron.ipcRenderer.send('runApp', {
+        appName: 'testApp3',
+        statementList: statementList3
       })
 }
 
@@ -199,6 +229,11 @@ function App () {
           <Button onClick = {testButton2}>
           BuzzAndLightOff
           </Button>
+          <p>{JSON.stringify(statementList3)}</p>
+          <Button onClick = {testButton3}>
+            IfBuzzThenBuzzsd
+          </Button>
+          
         </Tab>
       </Tabs>
     </div>

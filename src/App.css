@@ -8,3 +8,21 @@
 .dropdown {
   margin-bottom: 10px;
 }
+
+#top,
+#bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 50%;
+}
+
+#top {
+  top: 0;
+  background-color: orange;
+}
+
+#bottom {
+  bottom: 0;
+  background-color: green;
+}

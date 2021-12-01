@@ -1,6 +1,8 @@
+const {executeStatement} = require('./intepreter.js');
+
 function startReceiveTweet(tweetInfo){
     var PORT = 1235;
-    var HOST = '10.20.23.61';
+    var HOST = '10.20.23.65';
     var dgram = require('dgram');
     var client = dgram.createSocket('udp4');
 
@@ -9,7 +11,7 @@ function startReceiveTweet(tweetInfo){
         console.log('UDP Client listening on ' + address.address + ":" + address.port);
         client.setBroadcast(true)
         client.setMulticastTTL(128); 
-        client.addMembership('232.1.1.1', '10.20.23.61');
+        client.addMembership('232.1.1.1', HOST);
     });
 
     client.on('message', function (message, remote) {   
@@ -20,6 +22,7 @@ function startReceiveTweet(tweetInfo){
         switch (tweetObject['Tweet Type']) {
             case 'Identity_Language':
                 tweetInfo.Identity_Language[tweetObject['Thing ID']] = tweetObject;
+                tweetInfo.Identity_Language[tweetObject['Thing ID']].IP = remote.address;
                 break;
             case 'Identity_Entity':
                 tweetInfo.Identity_Entity[tweetObject['Thing ID'] + tweetObject['ID']] = tweetObject;
@@ -28,12 +31,25 @@ function startReceiveTweet(tweetInfo){
                 tweetInfo.Identity_Thing[tweetObject['Thing ID']] = tweetObject;
                 break;
             case 'Service':
+                console.log('Service!!');
                 tweetInfo.Service[tweetObject['Thing ID'] + tweetObject['Entity ID'] + tweetObject['Name']] = tweetObject;
+                if(tweetObject['Name'] == 'TurnOff') {
+                    executeStatement(tweetInfo, {
+                        type: 'service',
+                        thingID: tweetObject['Thing ID'],
+                        entityID: tweetObject['Entity ID'],
+                        serviceName: tweetObject['Name'],
+                        serviceInput: [0]
+                    });
+                }
+                break;
+            case 'Relationship':
+                console.log('relationship!!');
+                tweetInfo.Relationship[tweetObject['Thing ID'] + tweetObject['Entity ID'] + tweetObject['Name']] = tweetObject;
                 break;
             default:
                 break;
         }
-        //console.log(tweetInfo);
     });
 
     client.bind(PORT, HOST);

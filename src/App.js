@@ -6,6 +6,7 @@ import {
   Grid, Row, Column
 } from 'carbon-components-react'
 import * as React from 'react'
+const electron = window.require('electron')
 
 const rows = [
   {
@@ -37,6 +38,10 @@ const headers = [
 ]
 
 function App () {
+  electron.ipcRenderer.on('tweetMessage-reply', (event, arg) => {
+    console.log(arg)
+  })
+  electron.ipcRenderer.send('tweetMessage', 'sendstring')
   return (
     <div className="App">
       <Tabs>

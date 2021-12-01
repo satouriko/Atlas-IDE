@@ -72,8 +72,11 @@ export function Services (props) {
   const { tweetInfo } = props
   const [filterKey, setFilterKey] = useState('All')
   //const rows = Object.values(tweetInfo.Service).map(row => ({id: row['name']}))
-  const rows = Object.keys(tweetInfo.Service).map(key => ({id: key, ...tweetInfo.Service[key]}))
-    .filter((row) => row['Thing ID'] === filterKey || filterKey === 'All')
+  const rows = Object.keys(tweetInfo.Service).map(key => ({id: key, ...tweetInfo.Service[key]})).sort(function(a, b){
+    if (a['Entity ID'] < b['Entity ID']) { return -1; }
+    if (a['Entity ID'] > b['Entity ID']) { return 1; }
+    return 0;
+  }).filter((row) => row['Thing ID'] === filterKey || filterKey === 'All')
   const items = [
     { id: 'All', text: 'All' },
     ...Object.keys(tweetInfo.Identity_Thing).map(key => ({id: key, text: tweetInfo.Identity_Thing[key]['Thing ID']})).sort(function(a, b){

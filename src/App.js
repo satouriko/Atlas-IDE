@@ -24,12 +24,14 @@ function App () {
     Identity_Language: {},
     Identity_Entity: {},
     Identity_Thing: {},
-    Service: {}
+    Service: {},
+    Relationship: {}
   })
   useEffect(() => {
     setInterval(() => {
       electron.ipcRenderer.on('tweetMessage-reply', (event, arg) => {
         setTweetInfo(arg)
+        console.log(arg)
       })
       electron.ipcRenderer.send('tweetMessage', 'sendstring')
     }, 2500)

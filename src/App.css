@@ -26,3 +26,10 @@
   bottom: 0;
   background-color: green;
 }
+
+.convert-button {
+  z-index: 1;
+  position: absolute;
+  right: 40px;
+  top: 60px;
+}

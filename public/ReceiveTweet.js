@@ -2,7 +2,7 @@ const {executeStatement} = require('./intepreter.js');
 
 function startReceiveTweet(tweetInfo){
     var PORT = 1235;
-    var HOST = '10.20.23.65';
+    var HOST = '10.20.23.61';
     var dgram = require('dgram');
     var client = dgram.createSocket('udp4');
 
@@ -11,7 +11,7 @@ function startReceiveTweet(tweetInfo){
         console.log('UDP Client listening on ' + address.address + ":" + address.port);
         client.setBroadcast(true)
         client.setMulticastTTL(128); 
-        client.addMembership('232.1.1.1', '10.20.23.65');
+        client.addMembership('232.1.1.1', '10.20.23.61');
     });
 
     client.on('message', function (message, remote) {   

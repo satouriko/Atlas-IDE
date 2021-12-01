@@ -16,7 +16,7 @@ let tweetInfo = {
 ipcMain.on('tweetMessage', (event, arg) => {
   // When we receive a MessagePort in the main process, it becomes a
   // MessagePortMain.
-  console.log(arg);
+  // console.log(arg);
   event.sender.send('tweetMessage-reply', tweetInfo);
 })
 

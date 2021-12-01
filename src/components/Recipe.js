@@ -19,6 +19,7 @@ export function Recipe() {
     <block type="controls_ifelse" x="0" y="0"></block>
     </xml>
       `}>
+      <Block type="service" />
       <Block type="test_react_field" />
       <Block type="test_react_date_field" />
       <Block type="controls_ifelse" />

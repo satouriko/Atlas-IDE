@@ -13,36 +13,46 @@ export function Recipe(props) {
     console.log(Blockly.Blocks)
   }, [Object.keys(tweetInfo.Service).join('\n')])
   const simpleWorkspace = useRef()
+  const generateCode = () => {
+    const code = BlocklyJS.workspaceToCode(
+      simpleWorkspace.current.workspace
+    )
+    console.log(code);
+  }
   return (
-    <BlocklyComponent ref={simpleWorkspace}
-                      readOnly={false} trashcan={true} media={'media/'}
-                      move={{
-                        scrollbars: true,
-                        drag: true,
-                        wheel: true
-                      }}
-                      initialXml={`
-    <xml xmlns="http://www.w3.org/1999/xhtml">
-    </xml>
+    <>
+        <button onClick={generateCode} className="convert-button">Convert</button>
+        <BlocklyComponent ref={simpleWorkspace}
+                          readOnly={false} trashcan={true} media={'media/'}
+                          move={{
+                            scrollbars: true,
+                            drag: true,
+                            wheel: true
+                          }}
+                          initialXml={`
+<xml xmlns="http://www.w3.org/1999/xhtml">
+<block type="controls_ifelse" x="0" y="0"></block>
+</xml>
       `}>
-      <Category name="Logic">
-        <Block type="ignore"></Block>
-      </Category>
-      <Category name="Services">
-        <Block type="service1"></Block>
-      </Category>
-      <Category name="Relationships"></Category>
-      <Category name="Literals">
-        <Block type="math_number">
-          <Field name="NUM">0</Field>
-        </Block>
-        <Block type="text">
-          <Field name="TEXT"></Field>
-        </Block>
-        <Block type="logic_boolean">
-          <Field name="BOOL">TRUE</Field>
-        </Block>
-      </Category>
-    </BlocklyComponent>
+          <Category name="Logic">
+            <Block type="ignore"></Block>
+          </Category>
+          <Category name="Services">
+            <Block type="service1"></Block>
+          </Category>
+          <Category name="Relationships"></Category>
+          <Category name="Literals">
+            <Block type="math_number">
+              <Field name="NUM">0</Field>
+            </Block>
+            <Block type="text">
+              <Field name="TEXT"></Field>
+            </Block>
+            <Block type="logic_boolean">
+              <Field name="BOOL">TRUE</Field>
+            </Block>
+          </Category>
+        </BlocklyComponent>
+    </>
   )
 }

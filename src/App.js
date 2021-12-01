@@ -1,7 +1,7 @@
 import './App.css'
 import 'carbon-components/css/carbon-components.css'
 import {
-  Tabs, Tab, Dropdown, DataTable,
+  Button, Tabs, Tab, Dropdown, DataTable,
   Table, TableHead, TableRow, TableBody, TableCell, TableHeader,
   Grid, Row, Column
 } from 'carbon-components-react'
@@ -19,6 +19,60 @@ import { Recipe } from './components/Recipe'
 
 const electron = window.require('electron')
 
+  let statementList1 = [
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'LED',
+      serviceName: 'TurnOn',
+      serviceInput: [0]
+    },
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [1000, 5]
+    }
+  ];
+  let statementList2 = [
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'LED',
+      serviceName: 'TurnOff',
+      serviceInput: [0]
+    },
+    {
+      type: 'service',
+      thingID: 'RPI1',
+      entityID: 'BUZZER',
+      serviceName: 'BUZZ',
+      serviceInput: [2000, 3]
+    }
+  ];
+
+function testButton(){
+  console.log(statementList1);
+  electron.ipcRenderer.on('runApp-finish', (event, arg) => {
+      console.log('finish running statement ' + arg);
+      })
+      electron.ipcRenderer.send('runApp', {
+        appName: 'testApp1',
+        statementList: statementList1
+      })
+}
+
+function testButton2(){
+  console.log(statementList2);
+  electron.ipcRenderer.on('runApp-finish', (event, arg) => {
+      console.log('finish running statement ' + arg);
+      })
+      electron.ipcRenderer.send('runApp', {
+        appName: 'testApp2',
+        statementList: statementList2
+      })
+}
 
 function App () {
   const [tweetInfo, setTweetInfo] = useState({
@@ -60,6 +114,14 @@ function App () {
         </Tab>
         <Tab id="tab-5" label="Application">
           <p>Content for third tab goes here.</p>
+          <p>{JSON.stringify(statementList1)}</p>
+          <Button onClick = {testButton}>
+          BuzzAndLightOn
+          </Button>
+          <p>{JSON.stringify(statementList2)}</p>
+          <Button onClick = {testButton2}>
+          BuzzAndLightOff
+          </Button>
         </Tab>
       </Tabs>
     </div>

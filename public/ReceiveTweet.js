@@ -2,7 +2,7 @@ const {executeStatement} = require('./intepreter.js');
 
 function startReceiveTweet(tweetInfo){
     var PORT = 1235;
-    var HOST = '10.20.23.66';
+    var HOST = '10.20.23.65';
     var dgram = require('dgram');
     var client = dgram.createSocket('udp4');
 
@@ -45,7 +45,7 @@ function startReceiveTweet(tweetInfo){
                 break;
             case 'Relationship':
                 console.log('relationship!!');
-                tweetInfo.Service[tweetObject['Thing ID'] + tweetObject['Entity ID'] + tweetObject['Name']] = tweetObject;
+                tweetInfo.Relationship[tweetObject['Thing ID'] + tweetObject['Entity ID'] + tweetObject['Name']] = tweetObject;
                 break;
             default:
                 break;

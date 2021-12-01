@@ -5,7 +5,17 @@ const { executeStatement } = require('./intepreter.js')
 
 let mainWindow;
 
-let canExcute = true;
+/*
+let AppList = {
+  appName: {
+    appName: '',
+    statementList: [],
+    canExecute: boolean
+  },
+  appName2...
+}
+*/
+let AppList = {};
 
 let tweetInfo = {
   Identity_Language: {},
@@ -22,18 +32,25 @@ ipcMain.on('tweetMessage', (event, arg) => {
   event.sender.send('tweetMessage-reply', tweetInfo);
 })
 
-ipcMain.on('runApp', (event, statementList) => {
-  canExcute = true;
-  for(let i = 0; i < statementList.length; i++){
-    if(canExcute){
-      executeStatement(tweetInfo, statementList[i]);
+/*
+let appInfo = {
+  appName: '',
+  statementList: []
+}
+*/
+ipcMain.on('runApp', (event, appInfo) => {
+  AppList[appInfo.appName] = appInfo;
+  AppList[appInfo.appName]['canExecute'] = true;
+  for(let i = 0; i < AppList[appInfo.appName].statementList.length; i++){
+    if(AppList[appInfo.appName]['canExecute']){
+      executeStatement(tweetInfo, AppList[appInfo.appName].statementList[i]);
     }
     event.sender.send('runApp-finish', i);
   }
 })
 
-ipcMain.on('stopApp', (event, arg)=>{
-  canExcute = false;
+ipcMain.on('stopApp', (event, appName)=>{
+  AppList[appName]['canExecute'] = false;
   event.sender.send('stopApp-finish', null);
 })
 

@@ -1,7 +1,8 @@
 const { ipcMain, app, BrowserWindow, MessageChannelMain } = require('electron')
-
+const fs = require('fs')
 const { startReceiveTweet } = require('./ReceiveTweet.js')
-const { executeStatement } = require('./intepreter.js')
+const { executeStatement } = require('./intepreter.js');
+const { captureRejectionSymbol } = require('events');
 
 let mainWindow;
 
@@ -52,6 +53,30 @@ ipcMain.on('runApp', (event, appInfo) => {
 ipcMain.on('stopApp', (event, appName)=>{
   AppList[appName]['canExecute'] = false;
   event.sender.send('stopApp-finish', null);
+})
+/*
+let appInfo = {
+  appName: '',
+  fileName: '',
+  statementList: []
+}
+*/
+ipcMain.on('saveApp', (event, appInfo) => {
+  AppList[appInfo.appName].statementList = appInfo.statementList;
+  try {
+    fs.writeFileSync(appInfo.fileName, JSON.stringify(AppList[appInfo.appName]), {flag: 'r+'} );
+  } catch (err) {
+    console.error(err)
+  }
+})
+
+ipcMain.on('loadApp', (event, fileName) => {
+  try {
+    targetApp = JSON.parse(fs.readFileSync(fileName));
+    AppList[targetApp.appName] = targetApp;
+  } catch (err) {
+    console.error(err);
+  }
 })
 
 function createWindow () {

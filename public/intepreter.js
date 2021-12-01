@@ -32,15 +32,16 @@ function listToString(list){
 
 async function executeStatement(tweetInfo, statement){
     console.log('Try to execute!!');
+    let result = false;
     switch (statement.type) {
         case 'service':
-            let result = await serviceCall(tweetInfo, {
+            let sResult = await serviceCall(tweetInfo, {
                 thingID: statement.thingID,
                 entityID: statement.entityID,
                 serviceName: statement.serviceName,
                 serviceInput: statement.serviceInput
             });
-            return result;
+            return sResult;
         case 'relationship':
             result = false;
             switch(statement.relationshipType) {
@@ -123,21 +124,34 @@ async function executeStatement(tweetInfo, statement){
             }
             return result;
         case 'ifThen':
-            let ifStatement1 = await executeStatement(tweetInfo, statement.ifStatement);
-            pass = false;
-            if(typeof ifStatement1 == 'boolean') {
-                pass  = ifStatement1;
-            }else if(ifStatement1.Status == 'Successful') {
-                pass = true;
+            let pass = false;    
+            try {
+                let ifStatement1 = await executeStatement(tweetInfo, statement.ifStatement);
+                if(typeof ifStatement1 == 'boolean') {
+                    pass  = ifStatement1;
+                }else if(ifStatement1.Status == 'Successful') {
+                    pass = true;
+                }
+            }catch(err) {
+                console.log(err);
             }
             result = false;
             if(pass) {
-                let thenStatement2 = executeStatement(tweetInfo, statement.thenStatement);
-                if(typeof thenStatement2 == 'boolean') {
-                    result  = thenStatement2;
-                }else if(thenStatement2.Status == 'Successful') {
-                    result = true;
+                console.log(pass);
+                try {
+                    let thenStatement2 = executeStatement(tweetInfo, statement.thenStatement);
+                    if(typeof thenStatement2 == 'boolean') {
+                        result  = thenStatement2;
+                    }else if(thenStatement2.Status == 'Successful') {
+                        result = true;
+                    }
+                }catch(err) {
+                    console.log(err);
+                }finally {
+                    console.log(result);
                 }
+            }else {
+                console.log(!pass);
             }
             return result;
         default:

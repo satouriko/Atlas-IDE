@@ -3,6 +3,7 @@ const fs = require('fs')
 const { startReceiveTweet } = require('./ReceiveTweet.js')
 const { executeStatement } = require('./intepreter.js');
 const { captureRejectionSymbol } = require('events');
+const path = require('path');
 
 let mainWindow;
 
@@ -61,10 +62,22 @@ let appInfo = {
   statementList: []
 }
 */
+
 ipcMain.on('saveApp', (event, appInfo) => {
+  if(AppList[appInfo.appName] === undefined){
+    AppList[appInfo.appName] = {
+      appName: appInfo.appName,
+      statementList: [],
+      canExecute: true
+    };
+  }
   AppList[appInfo.appName].statementList = appInfo.statementList;
   try {
-    fs.writeFileSync(appInfo.fileName, JSON.stringify(AppList[appInfo.appName]), {flag: 'r+'} );
+    fs.writeFile(appInfo.fileName, JSON.stringify(AppList[appInfo.appName]), function (err) {
+      if (err) throw err;
+      console.log('File is created successfully.');
+      event.sender.send('saveApp-finish', null);
+    });
   } catch (err) {
     console.error(err)
   }
@@ -72,15 +85,19 @@ ipcMain.on('saveApp', (event, appInfo) => {
 
 ipcMain.on('loadApp', (event, fileName) => {
   try {
-    targetApp = JSON.parse(fs.readFileSync(fileName));
-    AppList[targetApp.appName] = targetApp;
+    fs.readFile(fileName, (err, data)=>{
+      if (err) throw err;
+      targetApp = JSON.parse(data);
+      AppList[targetApp.appName] = targetApp;
+      event.sender.send('loadApp-finish', null);
+    });
   } catch (err) {
     console.error(err);
   }
 })
 
 ipcMain.on('getApp', (event, appName)=>{
-  event.sender.send('getApp-reply', appList[appName]);
+  event.sender.send('getApp-reply', AppList[appName]);
 })
 
 ipcMain.on('syncApp', (event, appInfo)=>{

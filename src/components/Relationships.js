@@ -11,72 +11,58 @@ import {
 import * as React from 'react'
 import { useState } from 'react'
 
-const rows = [
-  {
-    id: 'a' ,
-    name: 'Load balancer 1',
-    status: 'Disabled'
-  },
-  {
-    id: 'b',
-    name: 'Load balancer 2',
-    status: 'Starting'
-  },
-  {
-    id: 'c',
-    name: 'Load balancer 3',
-    status: 'Active'
-  }
-]
-
 const headers = [
   {
     key: 'Thing ID',
     header: 'Thing ID'
   },
   {
-    key: 'Entity ID',
-    header: 'Entity ID'
-  },
-  {
     key: 'Name',
     header: 'Name'
-  },
-  {
-    key: 'Space ID',
-    header: 'Space ID'
   },
   {
     key: 'Type',
     header: 'Type'
   },
   {
-    key: 'Description',
-    header: 'Description'
+    key: 'FS name',
+    header: 'FS name'
   },
   {
-    key: 'Keywords',
-    header: 'Keywords'
+    key: 'SS name',
+    header: 'SS name'
   },
   {
-    key: 'AppCategory',
-    header: 'AppCategory'
+    key: 'Space ID',
+    header: 'Space ID'
   },
   {
-    key: 'Vendor',
-    header: 'Vendor'
+    key: 'Category',
+    header: 'Category'
   },
+  {
+    key: 'Owner',
+    header: 'Owner'
+  }
 ]
 
 export function Relationships (props) {
   const { tweetInfo } = props
   const [filterKey, setFilterKey] = useState('All')
   //const rows = Object.values(tweetInfo.Service).map(row => ({id: row['name']}))
-  const rows = Object.keys(tweetInfo.Service).map(key => ({id: key, ...tweetInfo.Service[key]}))
-  .filter((row) => row['Thing ID'] === filterKey || filterKey === 'All')
+  const rows = Object.keys(tweetInfo.Relationship).map(key => ({id: key, ...tweetInfo.Relationship[key]}))
+  .sort(function(a, b){
+    if (a['Type'] < b['Type']) { return -1; }
+    if (a['Type'] > b['Type']) { return 1; }
+    return 0;
+  }).filter((row) => row['Thing ID'] === filterKey || filterKey === 'All')
   const items = [
     { id: 'All', text: 'All' },
-    ...Object.keys(tweetInfo.Identity_Thing).map(key => ({id: key, text: tweetInfo.Identity_Thing[key]['Thing ID']}))
+    ...Object.keys(tweetInfo.Identity_Thing).map(key => ({id: key, text: tweetInfo.Identity_Thing[key]['Thing ID']})).sort(function(a, b){
+      if (a.text < b.text) { return -1; }
+      if (a.text > b.text) { return 1; }
+      return 0;
+    })
   ]
   //console.log(1, props.tweetInfo)
   return (
@@ -89,7 +75,7 @@ export function Relationships (props) {
         items={items}
         itemToString={(item) => (item ? item.text : '')}
         label="Dropdown menu options"
-        titleText="Thing of Services"
+        titleText="Relationship of Services"
         onChange={(e) => setFilterKey(e.selectedItem.id)}
       />
       <DataTable rows={rows} headers={headers}>

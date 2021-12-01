@@ -19,9 +19,7 @@ import { Recipe } from './components/Recipe'
 
 const electron = window.require('electron')
 
-function testButton(){
-  console.log('test');
-  let statementList = [
+  let statementList1 = [
     {
       type: 'service',
       thingID: 'RPI1',
@@ -37,18 +35,7 @@ function testButton(){
       serviceInput: [1000, 5]
     }
   ];
-  electron.ipcRenderer.on('runApp-finish', (event, arg) => {
-      console.log('finish running statement ' + arg);
-      })
-      electron.ipcRenderer.send('runApp', {
-        appName: 'testApp',
-        statementList
-      })
-}
-
-function testButton2(){
-  console.log('test');
-  let statementList = [
+  let statementList2 = [
     {
       type: 'service',
       thingID: 'RPI1',
@@ -64,12 +51,26 @@ function testButton2(){
       serviceInput: [2000, 3]
     }
   ];
+
+function testButton(){
+  console.log(statementList1);
   electron.ipcRenderer.on('runApp-finish', (event, arg) => {
       console.log('finish running statement ' + arg);
       })
       electron.ipcRenderer.send('runApp', {
-        appName: 'testApp',
-        statementList
+        appName: 'testApp1',
+        statementList: statementList1
+      })
+}
+
+function testButton2(){
+  console.log(statementList2);
+  electron.ipcRenderer.on('runApp-finish', (event, arg) => {
+      console.log('finish running statement ' + arg);
+      })
+      electron.ipcRenderer.send('runApp', {
+        appName: 'testApp2',
+        statementList: statementList2
       })
 }
 
@@ -113,9 +114,11 @@ function App () {
         </Tab>
         <Tab id="tab-5" label="Application">
           <p>Content for third tab goes here.</p>
+          <p>{JSON.stringify(statementList1)}</p>
           <Button onClick = {testButton}>
           BuzzAndLightOn
           </Button>
+          <p>{JSON.stringify(statementList2)}</p>
           <Button onClick = {testButton2}>
           BuzzAndLightOff
           </Button>

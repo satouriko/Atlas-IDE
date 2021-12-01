@@ -72,3 +72,19 @@ Blockly.Blocks['test_react_date_field'] = {
     this.setStyle('loop_blocks');
   }
 };
+
+var service = {
+  "type": "service",
+  "message0": "service",
+  "output": null,
+  "colour": 230,
+  "tooltip": "",
+  "helpUrl": ""
+};
+
+Blockly.Blocks['service'] = {
+  init: function() {
+    this.jsonInit(service);
+    this.setStyle('loop_blocks');
+  }
+};

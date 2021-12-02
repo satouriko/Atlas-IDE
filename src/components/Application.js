@@ -274,17 +274,34 @@ function testButton4(){
 
 export function Application(props) {
   const { appInfo } = props
-  const { tweetInfo } = props
-  console.log(appInfo)
   const rows = Object.keys(appInfo).map(key => ({
     id: key,
     ...appInfo[key]
   }))
 
+  const open = () => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.multiple = true
+    input.onchange = e => {
+      const files = e.target.files
+      for (const file of files) {
+        const listener = (event, arg) => {
+          if (arg.path === file.path) {
+            props.reloadApp()
+            electron.ipcRenderer.off('loadApp-finish', listener)
+          }
+        }
+        electron.ipcRenderer.on('loadApp-finish', listener)
+        electron.ipcRenderer.send('loadApp', file.path)
+      }
+    }
+    input.click()
+  }
 
   return (<>
     <div className="import-row">
-      <Button>Import</Button>
+      <Button onClick={open}>Import</Button>
     </div>
     <DataTable rows={rows} headers={headers}>
       {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (

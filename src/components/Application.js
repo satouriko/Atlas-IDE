@@ -6,6 +6,7 @@ import {
   TableRow,
 } from 'carbon-components-react'
 import * as React from 'react'
+import { useMemo, useRef, useState } from 'react'
 
 const electron = window.require('electron')
 const headers = [
@@ -20,22 +21,16 @@ const headers = [
   {
     key: 'offButton',
     header: 'Stop'
+  },
+  {
+    key: 'editButton',
+    header: 'Edit'
+  },
+  {
+    key: 'deleteButton',
+    header: 'Delete'
   }
 ]
-
-function runButton(input){
-  electron.ipcRenderer.on('runApp-finish', (event, arg) => {
-    console.log('finish running statement ' + arg);
-  })
-  electron.ipcRenderer.send('runApp', {
-    appName: input
-  })
-}
-
-function stopButton(appName){
-  console.log('stop');
-  electron.ipcRenderer.send('stopApp', appName);
-}
 
 export function Application(props) {
   const { appInfo } = props
@@ -43,6 +38,54 @@ export function Application(props) {
     id: key,
     ...appInfo[key]
   }))
+  const [runningState, setRunningState] = useState({})
+  const runningStateRef = useRef(runningState)
+  runningStateRef.current = runningState
+  useMemo(() => {
+    const newRunningState = {}
+    for (const app of Object.keys(appInfo)) {
+      if (runningState[app] && appInfo[app].statementList.length === runningState[app].n) {
+        newRunningState[app] = runningState[app]
+      }
+    }
+    setRunningState(newRunningState)
+  }, [appInfo])
+
+  const runButton = (input) => {
+    const listener = (event, arg) => {
+      if (input === arg.appName) {
+        if (runningStateRef.current[input]) {
+          setRunningState({
+            ...runningStateRef.current,
+            [input]: {
+              i: arg.i,
+              n: runningStateRef.current[input].n
+            }
+          })
+          if (arg.i === runningStateRef.current[input].n - 1) {
+            electron.ipcRenderer.off('runApp-finish', listener)
+          }
+        } else {
+          electron.ipcRenderer.off('runApp-finish', listener)
+        }
+      }
+    }
+    electron.ipcRenderer.on('runApp-finish', listener)
+    setRunningState({
+      ...runningState,
+      [input]: {
+        i: -1,
+        n: appInfo[input].statementList.length
+      }
+    })
+    electron.ipcRenderer.send('runApp', {
+      appName: input
+    })
+  }
+
+  const stopButton = (appName) => {
+    electron.ipcRenderer.send('stopApp', appName);
+  }
 
   const open = () => {
     const input = document.createElement('input')
@@ -62,6 +105,17 @@ export function Application(props) {
       }
     }
     input.click()
+  }
+
+  const deleteButton = (appName) => {
+    const listener = (event, arg) => {
+      if (arg === appName) {
+        props.reloadApp()
+        electron.ipcRenderer.off('deleteApp-finish', listener)
+      }
+    }
+    electron.ipcRenderer.on('deleteApp-finish', listener)
+    electron.ipcRenderer.send('deleteApp', appName);
   }
 
   return (<>
@@ -87,10 +141,20 @@ export function Application(props) {
                   {row.cells[0].value}
                 </TableCell>
                 <TableCell>
-                  <Button size="small" onClick={() => runButton(row.cells[0].value)}>Start</Button>
+                  <Button
+                    disabled={runningState[row.cells[0].value] !== undefined && runningState[row.cells[0].value].i !== runningState[row.cells[0].value].n - 1}
+                    size="small" onClick={() => runButton(row.cells[0].value)}>Start</Button>
                 </TableCell>
                 <TableCell>
-                  <Button size="small" kind="danger--tertiary" onClick={() => stopButton(row.cells[0].value)}>Stop</Button>
+                  <Button
+                    disabled={runningState[row.cells[0].value] === undefined || runningState[row.cells[0].value].i === runningState[row.cells[0].value].n - 1}
+                    size="small" kind="danger--tertiary" onClick={() => stopButton(row.cells[0].value)}>Stop</Button>
+                </TableCell>
+                <TableCell>
+                  <Button size="small" kind="secondary" onClick={() => props.editApp(row.cells[0].value)}>Edit</Button>
+                </TableCell>
+                <TableCell>
+                  <Button size="small" kind="danger" onClick={() => deleteButton(row.cells[0].value)}>Delete</Button>
                 </TableCell>
               </TableRow>
             ))}

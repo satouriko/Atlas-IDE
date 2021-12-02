@@ -44,10 +44,27 @@ function App () {
       electron.ipcRenderer.send('tweetMessage', 'sendstring')
     }, 2500)
   }, [])
+  const [selectedTab, setSelectedTab] = useState(0)
   const [firstTimeResize, setFirstTimeResize] = useState(false)
+  const [editingApp, setEditingApp] = useState('')
+  const editApp = (appName) => {
+    setEditingApp(appName)
+    setSelectedTab(3)
+    if (!firstTimeResize) {
+      window.dispatchEvent(new Event('resize'))
+      setFirstTimeResize(true)
+    }
+  }
+  const onSelectionChange = (e) => {
+    setSelectedTab(e)
+    if (e === 3 && !firstTimeResize) {
+      window.dispatchEvent(new Event('resize'))
+      setFirstTimeResize(true)
+    }
+  }
   return (
     <div className="App">
-      <Tabs>
+      <Tabs selected={selectedTab} onSelectionChange={onSelectionChange}>
         <Tab id="tab-1" label="Things">
           <Things tweetInfo={tweetInfo} />
         </Tab>
@@ -57,16 +74,11 @@ function App () {
         <Tab id="tab-3" label="Relationships">
           <Relationships tweetInfo = {tweetInfo} />
         </Tab>
-        <Tab id="tab-4" label="Recipes" onClick={() => {
-          setFirstTimeResize(true)
-          if (!firstTimeResize) {
-            window.dispatchEvent(new Event('resize'))
-          }
-        }}>
-          <Recipe tweetInfo={tweetInfo} reloadApp={reloadApp} />
+        <Tab id="tab-4" label="Recipes">
+          <Recipe tweetInfo={tweetInfo} reloadApp={reloadApp} appInfo={appInfo} editingApp={editingApp} />
         </Tab>
         <Tab id="tab-5" label="Application">
-          <Application tweetInfo = {tweetInfo} appInfo={appInfo} reloadApp={reloadApp} />
+          <Application tweetInfo={tweetInfo} appInfo={appInfo} reloadApp={reloadApp} editApp={editApp} />
         </Tab>
       </Tabs>
     </div>

@@ -7,7 +7,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 const electron = window.require('electron')
 
 export function Recipe(props) {
-  const { tweetInfo } = props
+  const { tweetInfo, appInfo } = props
   const [serviceBlockIds, setServiceBlockIds] = useState([])
   const [services, setServices] = useState([])
   const relationships = Object.keys(tweetInfo.Relationship).map((key) => ({
@@ -44,7 +44,7 @@ export function Recipe(props) {
   const save = (appJson) => {
     const listener = (event, arg) => {
       if (arg === `./${appJson.appName}.json`) {
-        alert('Saved ' + arg)
+        alert('Saved app to ' + arg)
         electron.ipcRenderer.off('saveApp-finish', listener)
         props.reloadApp()
       }
@@ -77,6 +77,11 @@ export function Recipe(props) {
     }
     input.click()
   }
+  useEffect(() => {
+    if (props.editingApp) {
+      simpleWorkspace.current?.setXml(appInfo[props.editingApp].xml)
+    }
+  }, [props.editingApp])
   return (
     <>
         <button onClick={generateCode} className="convert-button">Save</button>

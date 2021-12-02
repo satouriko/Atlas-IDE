@@ -48,7 +48,10 @@ ipcMain.on('runApp', async (event, appInfo) => {
     if(AppList[appInfo.appName]['canExecute']){
       await executeStatement(tweetInfo, AppList[appInfo.appName].statementList[i]);
     }
-    event.sender.send('runApp-finish', i);
+    event.sender.send('runApp-finish', {
+      appName: appInfo.appName,
+      i
+    });
   }
 })
 
@@ -59,7 +62,7 @@ ipcMain.on('stopApp', (event, appName)=>{
 
 ipcMain.on('deleteApp', (event, appName)=>{
   delete AppList[appName];
-  event.sender.send('deleteApp-finish', null);
+  event.sender.send('deleteApp-finish', appName);
 })
 
 /*
@@ -72,6 +75,7 @@ let appInfo = {
 */
 
 ipcMain.on('saveApp', (event, appInfo) => {
+  console.log(appInfo);
   if(AppList[appInfo.appName] === undefined){
     AppList[appInfo.appName] = {
       appName: appInfo.appName,

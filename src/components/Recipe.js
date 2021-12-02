@@ -3,7 +3,8 @@ import BlocklyJS from 'blockly/javascript';
 import { makeCustomBlocks } from '../blocks/customblocks';
 import '../generator/generator';
 import { useEffect, useMemo, useRef, useState } from 'react'
-import * as Blockly from 'blockly/core'
+
+const electron = window.require('electron')
 
 export function Recipe(props) {
   const { tweetInfo } = props
@@ -40,15 +41,35 @@ export function Recipe(props) {
     })
   }, [Object.keys(tweetInfo.Service).sort().join('\n')])
   const simpleWorkspace = useRef()
+  const save = (appJson) => {
+    electron.ipcRenderer.on('saveApp-finish', (event, arg) => {
+      alert('Saved');
+    })
+    electron.ipcRenderer.send('saveApp', {
+      fileName: `./${appJson.appName}.json`,
+      ...appJson,
+      xml: simpleWorkspace.current.getXml()
+    })
+  }
   const generateCode = () => {
     const code = BlocklyJS.workspaceToCode(
       simpleWorkspace.current.workspace
     )
-    console.log(code);
+    save(JSON.parse(code))
   }
+  // const open = () => {
+  //   const input = document.createElement('input')
+  //   input.type = 'file'
+  //   input.onchange = e => {
+  //     const file = e.target.files[0]
+  //     console.log(file)
+  //   }
+  //   input.click()
+  // }
   return (
     <>
-        <button onClick={generateCode} className="convert-button">Convert</button>
+        <button onClick={generateCode} className="convert-button">Save</button>
+        {/*<button onClick={open} className="convert-button2">Open</button>*/}
         <BlocklyComponent ref={simpleWorkspace}
                           readOnly={false} trashcan={true} media={'media/'}
                           move={{
@@ -58,7 +79,13 @@ export function Recipe(props) {
                           }}
                           initialXml={`
 <xml xmlns="http://www.w3.org/1999/xhtml">
-  <block type="recipe"></block>
+  <block type="recipe">
+    <value name="NAME">
+      <block type="text">
+        <field name="TEXT">Type your app name here</field>
+      </block>
+    </value>
+  </block>
 </xml>
       `}>
           <Category name="Logic">

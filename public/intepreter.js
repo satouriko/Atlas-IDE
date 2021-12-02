@@ -131,7 +131,7 @@ async function executeStatement(tweetInfo, statement){
                     break;
             }
             return result;
-        case 'ifThen':
+        case 'ifthen':
             let pass = false;
             try {
                 let ifStatement1 = await executeStatement(tweetInfo, statement.ifStatement);

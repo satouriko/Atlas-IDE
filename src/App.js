@@ -29,7 +29,7 @@ function App () {
     Relationship: {}
   })
   const [appInfo, setAppInfo] = useState({})
-  const onSave = () => {
+  const reloadApp = () => {
     electron.ipcRenderer.once('getApp-reply', (event, arg) => {
       setAppInfo(arg)
     })
@@ -63,7 +63,7 @@ function App () {
             window.dispatchEvent(new Event('resize'))
           }
         }}>
-          <Recipe tweetInfo={tweetInfo} onSave={onSave} />
+          <Recipe tweetInfo={tweetInfo} reloadApp={reloadApp} />
         </Tab>
         <Tab id="tab-5" label="Application">
           <Application tweetInfo = {tweetInfo} appInfo={appInfo} />

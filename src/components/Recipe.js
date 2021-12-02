@@ -46,7 +46,7 @@ export function Recipe(props) {
       if (arg === `./${appJson.appName}.json`) {
         alert('Saved ' + arg)
         electron.ipcRenderer.off('saveApp-finish', listener)
-        props.onSave()
+        props.reloadApp()
       }
     }
     electron.ipcRenderer.on('saveApp-finish', listener)
@@ -71,6 +71,7 @@ export function Recipe(props) {
       const file = e.target.files[0]
       electron.ipcRenderer.once('loadApp-finish', (event, arg) => {
         simpleWorkspace.current?.setXml(arg.xml)
+        props.reloadApp()
       })
       electron.ipcRenderer.send('loadApp', file.path)
     }

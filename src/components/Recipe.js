@@ -57,19 +57,23 @@ export function Recipe(props) {
     )
     save(JSON.parse(code))
   }
-  // const open = () => {
-  //   const input = document.createElement('input')
-  //   input.type = 'file'
-  //   input.onchange = e => {
-  //     const file = e.target.files[0]
-  //     console.log(file)
-  //   }
-  //   input.click()
-  // }
+  const open = () => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.onchange = e => {
+      const file = e.target.files[0]
+      electron.ipcRenderer.on('loadApp-finish', (event, arg) => {
+        simpleWorkspace.current?.setXml(arg.xml)
+        console.log(arg)
+      })
+      electron.ipcRenderer.send('loadApp', file.path)
+    }
+    input.click()
+  }
   return (
     <>
         <button onClick={generateCode} className="convert-button">Save</button>
-        {/*<button onClick={open} className="convert-button2">Open</button>*/}
+        <button onClick={open} className="convert-button2">Open</button>
         <BlocklyComponent ref={simpleWorkspace}
                           readOnly={false} trashcan={true} media={'media/'}
                           move={{

@@ -42,7 +42,7 @@ let appInfo = {
 }
 */
 ipcMain.on('runApp', async (event, appInfo) => {
-  AppList[appInfo.appName] = appInfo;
+  //AppList[appInfo.appName] = appInfo;
   AppList[appInfo.appName]['canExecute'] = true;
   for(let i = 0; i < AppList[appInfo.appName].statementList.length; i++){
     if(AppList[appInfo.appName]['canExecute']){

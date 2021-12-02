@@ -20,11 +20,19 @@ const headers = [
   {
     key: 'offButton',
     header: 'Stop'
+  },
+  {
+    key: 'editButton',
+    header: 'Edit'
+  },
+  {
+    key: 'deleteButton',
+    header: 'Delete'
   }
 ]
 
 function runButton(input){
-  electron.ipcRenderer.on('runApp-finish', (event, arg) => {
+  electron.ipcRenderer.once('runApp-finish', (event, arg) => {
     console.log('finish running statement ' + arg);
   })
   electron.ipcRenderer.send('runApp', {
@@ -64,6 +72,17 @@ export function Application(props) {
     input.click()
   }
 
+  const deleteButton = (appName) => {
+    const listener = (event, arg) => {
+      if (arg === appName) {
+        props.reloadApp()
+        electron.ipcRenderer.off('deleteApp-finish', listener)
+      }
+    }
+    electron.ipcRenderer.on('deleteApp-finish', listener)
+    electron.ipcRenderer.send('deleteApp', appName);
+  }
+
   return (<>
     <div className="import-row">
       <Button onClick={open}>Import</Button>
@@ -91,6 +110,12 @@ export function Application(props) {
                 </TableCell>
                 <TableCell>
                   <Button size="small" kind="danger--tertiary" onClick={() => stopButton(row.cells[0].value)}>Stop</Button>
+                </TableCell>
+                <TableCell>
+                  <Button size="small" kind="secondary" onClick={() => stopButton(row.cells[0].value)}>Edit</Button>
+                </TableCell>
+                <TableCell>
+                  <Button size="small" kind="danger" onClick={() => deleteButton(row.cells[0].value)}>Delete</Button>
                 </TableCell>
               </TableRow>
             ))}

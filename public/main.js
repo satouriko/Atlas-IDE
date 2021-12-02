@@ -59,7 +59,7 @@ ipcMain.on('stopApp', (event, appName)=>{
 
 ipcMain.on('deleteApp', (event, appName)=>{
   delete AppList[appName];
-  event.sender.send('deleteApp-finish', null);
+  event.sender.send('deleteApp-finish', appName);
 })
 
 /*

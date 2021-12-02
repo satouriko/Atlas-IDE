@@ -42,8 +42,9 @@ export function Recipe(props) {
   }, [Object.keys(tweetInfo.Service).sort().join('\n')])
   const simpleWorkspace = useRef()
   const save = (appJson) => {
-    electron.ipcRenderer.on('saveApp-finish', (event, arg) => {
+    electron.ipcRenderer.once('saveApp-finish', (event, arg) => {
       alert('Saved');
+      props.onSave();
     })
     electron.ipcRenderer.send('saveApp', {
       fileName: `./${appJson.appName}.json`,
@@ -62,7 +63,7 @@ export function Recipe(props) {
     input.type = 'file'
     input.onchange = e => {
       const file = e.target.files[0]
-      electron.ipcRenderer.on('loadApp-finish', (event, arg) => {
+      electron.ipcRenderer.once('loadApp-finish', (event, arg) => {
         simpleWorkspace.current?.setXml(arg.xml)
         console.log(arg)
       })

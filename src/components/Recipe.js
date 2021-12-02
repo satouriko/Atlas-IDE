@@ -68,7 +68,7 @@ export function Recipe(props) {
     input.type = 'file'
     input.onchange = e => {
       const file = e.target.files[0]
-      electron.ipcRenderer.on('loadApp-finish', (event, arg) => {
+      electron.ipcRenderer.once('loadApp-finish', (event, arg) => {
         simpleWorkspace.current?.setXml(arg.xml)
       })
       electron.ipcRenderer.send('loadApp', file.path)

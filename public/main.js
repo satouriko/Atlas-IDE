@@ -99,8 +99,8 @@ ipcMain.on('loadApp', (event, fileName) => {
   }
 })
 
-ipcMain.on('getApp', (event, appName)=>{
-  event.sender.send('getApp-reply', AppList[appName]);
+ipcMain.on('getApp', (event)=>{
+  event.sender.send('getApp-reply', AppList);
 })
 
 ipcMain.on('syncApp', (event, appInfo)=>{

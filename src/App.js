@@ -66,7 +66,7 @@ function App () {
           <Recipe tweetInfo={tweetInfo} reloadApp={reloadApp} />
         </Tab>
         <Tab id="tab-5" label="Application">
-          <Application tweetInfo = {tweetInfo} appInfo={appInfo} />
+          <Application tweetInfo = {tweetInfo} appInfo={appInfo} reloadApp={reloadApp} />
         </Tab>
       </Tabs>
     </div>

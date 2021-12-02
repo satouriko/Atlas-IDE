@@ -79,6 +79,7 @@ class BlocklyComponent extends React.Component {
     }
 
     setXml(xml) {
+        this.primaryWorkspace.clear()
         Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), this.primaryWorkspace)
     }
 

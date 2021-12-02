@@ -79,7 +79,7 @@ ipcMain.on('saveApp', (event, appInfo) => {
     fs.writeFile(appInfo.fileName, JSON.stringify(AppList[appInfo.appName]), function (err) {
       if (err) throw err;
       console.log('File is created successfully.');
-      event.sender.send('saveApp-finish', null);
+      event.sender.send('saveApp-finish', appInfo.fileName);
     });
   } catch (err) {
     console.error(err)

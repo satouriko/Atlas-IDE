@@ -46,6 +46,7 @@ export function Recipe(props) {
       if (arg === `./${appJson.appName}.json`) {
         alert('Saved ' + arg)
         electron.ipcRenderer.off('saveApp-finish', listener)
+        props.onSave()
       }
     }
     electron.ipcRenderer.on('saveApp-finish', listener)

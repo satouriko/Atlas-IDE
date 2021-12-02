@@ -6,7 +6,7 @@ import {
   TableRow,
 } from 'carbon-components-react'
 import * as React from 'react'
-import { useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 
 const electron = window.require('electron')
 const headers = [
@@ -39,15 +39,33 @@ export function Application(props) {
     ...appInfo[key]
   }))
   const [runningState, setRunningState] = useState({})
+  const runningStateRef = useRef(runningState)
+  runningStateRef.current = runningState
+  useMemo(() => {
+    const newRunningState = {}
+    for (const app of Object.keys(appInfo)) {
+      if (runningState[app] && appInfo[app].statementList.length === runningState[app].n) {
+        newRunningState[app] = runningState[app]
+      }
+    }
+    setRunningState(newRunningState)
+  }, [appInfo])
 
   const runButton = (input) => {
     const listener = (event, arg) => {
       if (input === arg.appName) {
-        setRunningState({
-          ...runningState,
-          [input]: arg.i
-        })
-        if (arg.i === appInfo[input].statementList.length - 1) {
+        if (runningStateRef.current[input]) {
+          setRunningState({
+            ...runningStateRef.current,
+            [input]: {
+              i: arg.i,
+              n: runningStateRef.current[input].n
+            }
+          })
+          if (arg.i === runningStateRef.current[input].n - 1) {
+            electron.ipcRenderer.off('runApp-finish', listener)
+          }
+        } else {
           electron.ipcRenderer.off('runApp-finish', listener)
         }
       }
@@ -55,7 +73,10 @@ export function Application(props) {
     electron.ipcRenderer.on('runApp-finish', listener)
     setRunningState({
       ...runningState,
-      [input]: -1
+      [input]: {
+        i: -1,
+        n: appInfo[input].statementList.length
+      }
     })
     electron.ipcRenderer.send('runApp', {
       appName: input
@@ -121,12 +142,12 @@ export function Application(props) {
                 </TableCell>
                 <TableCell>
                   <Button
-                    disabled={runningState[row.cells[0].value] !== undefined && runningState[row.cells[0].value] !== appInfo[row.cells[0].value].statementList.length - 1}
+                    disabled={runningState[row.cells[0].value] !== undefined && runningState[row.cells[0].value].i !== runningState[row.cells[0].value].n - 1}
                     size="small" onClick={() => runButton(row.cells[0].value)}>Start</Button>
                 </TableCell>
                 <TableCell>
                   <Button
-                    disabled={runningState[row.cells[0].value] === undefined || runningState[row.cells[0].value] === appInfo[row.cells[0].value].statementList.length - 1}
+                    disabled={runningState[row.cells[0].value] === undefined || runningState[row.cells[0].value].i === runningState[row.cells[0].value].n - 1}
                     size="small" kind="danger--tertiary" onClick={() => stopButton(row.cells[0].value)}>Stop</Button>
                 </TableCell>
                 <TableCell>

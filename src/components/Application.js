@@ -283,6 +283,9 @@ export function Application(props) {
 
 
   return (<>
+    <div className="import-row">
+      <Button>Import</Button>
+    </div>
     <DataTable rows={rows} headers={headers}>
       {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
         <Table {...getTableProps()}>
@@ -313,36 +316,5 @@ export function Application(props) {
         </Table>
       )}
     </DataTable>
-
-
-
-    <p>{JSON.stringify(statementList1)}</p>
-    <Button onClick = {testButton}>
-      BuzzAndLightOn
-    </Button>
-    <Button onClick = {saveButton}>
-      Save this app
-    </Button>
-    <Button onClick = {clearButton}>
-      Clear this app
-    </Button>
-    <Button onClick = {loadButton}>
-      Load this app
-    </Button>
-    <p>{JSON.stringify(statementList2)}</p>
-    <Button onClick = {testButton2}>
-      BuzzAndLightOff
-    </Button>
-    <Button onClick = {stopButton}>
-      Stop this app
-    </Button>
-    <p>{JSON.stringify(statementList3)}</p>
-    <Button onClick = {testButton3}>
-      IfBuzzThenBuzzsd
-    </Button>
-    <p>{JSON.stringify(statementList4)}</p>
-    <Button onClick = {testButton4}>
-      IfBuzzThenRecur
-    </Button>
     </>)
 }

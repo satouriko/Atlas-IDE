@@ -40,3 +40,8 @@
   right: 40px;
   top: 90px;
 }
+
+.import-row {
+  text-align: right;
+  margin-bottom: 10px;
+}

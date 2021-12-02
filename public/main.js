@@ -75,6 +75,7 @@ let appInfo = {
 */
 
 ipcMain.on('saveApp', (event, appInfo) => {
+  console.log(appInfo);
   if(AppList[appInfo.appName] === undefined){
     AppList[appInfo.appName] = {
       appName: appInfo.appName,

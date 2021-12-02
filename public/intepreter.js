@@ -39,6 +39,8 @@ async function executeStatements(tweetInfo, statements) {
 async function executeStatement(tweetInfo, statement){
     console.log('Try to execute!!');
     let result = false;
+    let service1 = {};
+    let service2 = {};
     switch (statement.type) {
         case 'service':
             let sResult = await serviceCall(tweetInfo, {
@@ -52,16 +54,16 @@ async function executeStatement(tweetInfo, statement){
             result = false;
             switch(statement.relationshipType) {
                 case 'control':
-                    let services1 = await serviceCall(tweetInfo, {
+                    services1 = await serviceCall(tweetInfo, {
                         thingID: statement.thingID,
                         entityID: statement.entityID,
                         serviceName: statement.serviceName,
                         serviceInput: statement.serviceInput,
                     });
                     if(services1.Status == 'Successful') {
-                        let services2 = await serviceCall(tweetInfo, {
-                            thingID: statement.thingID,
-                            entityID: statement.entityID,
+                        services2 = await serviceCall(tweetInfo, {
+                            thingID: statement.thingID2,
+                            entityID: statement.entityID2,
                             serviceName: statement.serviceName2,
                             serviceInput: statement.serviceInput2,
                         });
@@ -79,12 +81,12 @@ async function executeStatement(tweetInfo, statement){
                     });
                     if(services1.Status == 'Successful') {
                         let server2Input = [];
-                        server2Input.push(services1.getElementById('Service Result'));
+                        server2Input.push(+services1['Service Result']);
                         services2 = await serviceCall(tweetInfo, {
-                            thingID: statement.thingID,
-                            entityID: statement.entityID,
+                            thingID: statement.thingID2,
+                            entityID: statement.entityID2,
                             serviceName: statement.serviceName2,
-                            serviceInput: server2Input,
+                            serviceInput: statement.serviceInput2,
                         });
                         if(services2.Status == 'Successful') {
                             result = true;
@@ -93,8 +95,8 @@ async function executeStatement(tweetInfo, statement){
                     break;
                 case 'support':
                     services1 = await serviceCall(tweetInfo, {
-                        thingID: statement.thingID,
-                        entityID: statement.entityID,
+                        thingID: statement.thingID2,
+                        entityID: statement.entityID2,
                         serviceName: statement.serviceName2,
                         serviceInput: statement.serviceInput2,
                     });
@@ -102,8 +104,8 @@ async function executeStatement(tweetInfo, statement){
                         services2 = await serviceCall(tweetInfo, {
                             thingID: statement.thingID,
                             entityID: statement.entityID,
-                            serviceName: statement.serviceName1,
-                            serviceInput: statement.serviceInput1,
+                            serviceName: statement.serviceName,
+                            serviceInput: statement.serviceInput,
                         });
                         if(services2.Status == 'Successful') {
                             result = true;
@@ -118,8 +120,8 @@ async function executeStatement(tweetInfo, statement){
                         serviceInput: statement.serviceInput,
                     });
                     services2 = await serviceCall(tweetInfo, {
-                        thingID: statement.thingID,
-                        entityID: statement.entityID,
+                        thingID: statement.thingID2,
+                        entityID: statement.entityID2,
                         serviceName: statement.serviceName2,
                         serviceInput: statement.serviceInput2,
                     });

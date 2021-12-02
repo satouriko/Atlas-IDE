@@ -245,9 +245,9 @@ function testButton2(){
   })
 }
 
-function stopButton(){
+function stopButton(appName){
   console.log('stop');
-  electron.ipcRenderer.send('stopApp', 'testApp2');
+  electron.ipcRenderer.send('stopApp', appName);
 }
 
 function testButton3(){

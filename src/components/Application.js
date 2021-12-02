@@ -16,11 +16,11 @@ const headers = [
   },
   {
     key: 'onButton',
-    header: 'Turn On'
+    header: 'Start'
   },
   {
     key: 'offButton',
-    header: 'Turn Off'
+    header: 'Stop'
   }
 ]
 
@@ -322,10 +322,10 @@ export function Application(props) {
                   {row.cells[0].value}
                 </TableCell>
                 <TableCell>
-                  <Button size="small" onClick={() => testButton(row.cells[0].value)}>Turn On</Button>
+                  <Button size="small" onClick={() => testButton(row.cells[0].value)}>Start</Button>
                 </TableCell>
                 <TableCell>
-                  <Button size="small" kind="danger--tertiary" onClick={() => testButton(row.cells[0].value)}>Turn Off</Button>
+                  <Button size="small" kind="danger--tertiary" onClick={() => stopButton(row.cells[0].value)}>Stop</Button>
                 </TableCell>
               </TableRow>
             ))}

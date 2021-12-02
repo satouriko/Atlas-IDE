@@ -1,7 +1,7 @@
 import * as React from 'react'
 import 'carbon-components/css/carbon-components.css'
 import {
-  Button, DataTable, Table, TableHead, TableRow, TableBody, TableCell, TableHeader,
+  DataTable, Table, TableHead, TableRow, TableBody, TableCell, TableHeader,
 } from 'carbon-components-react'
 
 const headers = [

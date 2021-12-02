@@ -148,6 +148,46 @@ const electron = window.require('electron')
     }
   ];
 
+  let statementList4 = [
+    {
+      type: 'ifThen',
+      ifStatement: {
+            type: 'ifThen',
+            ifStatement: {
+                type: 'service',
+                thingID: 'RPI1',
+                entityID: 'BUZZER',
+                serviceName: 'BUZZ',
+                serviceInput: [1000, 10]
+            },
+            thenStatement: {
+              type: 'service',
+              thingID: 'RPI1',
+              entityID: 'LED',
+              serviceName: 'TurnOn',
+              serviceInput: [0]
+            }
+      },
+      thenStatement: {
+        type: 'ifThen',
+            ifStatement: {
+                type: 'service',
+                thingID: 'RPI1',
+                entityID: 'LED',
+                serviceName: 'TurnOff',
+                serviceInput: [0]
+            },
+            thenStatement: {
+              type: 'service',
+              thingID: 'RPI1',
+              entityID: 'BUZZER',
+              serviceName: 'BUZZ',
+              serviceInput: [1000, 5]
+            }
+      }
+    }
+  ];
+
 function testButton(){
   console.log(statementList1);
   electron.ipcRenderer.on('runApp-finish', (event, arg) => {
@@ -204,13 +244,24 @@ function stopButton(){
 }
 
 function testButton3(){
-  console.log(statementList2);
+  console.log(statementList3);
   electron.ipcRenderer.on('runApp-finish', (event, arg) => {
       console.log('finish running statement ' + arg);
       })
       electron.ipcRenderer.send('runApp', {
         appName: 'testApp3',
         statementList: statementList3
+      })
+}
+
+function testButton4(){
+  console.log(statementList4);
+  electron.ipcRenderer.on('runApp-finish', (event, arg) => {
+      console.log('finish running statement ' + arg);
+      })
+      electron.ipcRenderer.send('runApp', {
+        appName: 'testApp4',
+        statementList: statementList4
       })
 }
 
@@ -277,6 +328,10 @@ function App () {
           <p>{JSON.stringify(statementList3)}</p>
           <Button onClick = {testButton3}>
             IfBuzzThenBuzzsd
+          </Button>
+          <p>{JSON.stringify(statementList4)}</p>
+          <Button onClick = {testButton4}>
+            IfBuzzThenRecur
           </Button>
           
         </Tab>

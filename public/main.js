@@ -12,6 +12,7 @@ let AppList = {
   appName: {
     appName: '',
     statementList: [],
+    xml: '',
     canExecute: boolean
   },
   appName2...
@@ -59,7 +60,8 @@ ipcMain.on('stopApp', (event, appName)=>{
 let appInfo = {
   appName: '',
   fileName: '',
-  statementList: []
+  statementList: [],
+  xml: ''
 }
 */
 
@@ -72,6 +74,7 @@ ipcMain.on('saveApp', (event, appInfo) => {
     };
   }
   AppList[appInfo.appName].statementList = appInfo.statementList;
+  AppList[appInfo.appName].xml = appInfo.xml;
   try {
     fs.writeFile(appInfo.fileName, JSON.stringify(AppList[appInfo.appName]), function (err) {
       if (err) throw err;

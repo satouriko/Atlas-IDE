@@ -92,15 +92,15 @@ ipcMain.on('loadApp', (event, fileName) => {
       if (err) throw err;
       targetApp = JSON.parse(data);
       AppList[targetApp.appName] = targetApp;
-      event.sender.send('loadApp-finish', null);
+      event.sender.send('loadApp-finish', targetApp);
     });
   } catch (err) {
     console.error(err);
   }
 })
 
-ipcMain.on('getApp', (event, appName)=>{
-  event.sender.send('getApp-reply', AppList[appName]);
+ipcMain.on('getApp', (event)=>{
+  event.sender.send('getApp-reply', AppList);
 })
 
 ipcMain.on('syncApp', (event, appInfo)=>{

@@ -219,10 +219,10 @@ function clearButton(){
 function loadButton(){
   console.log('load');
   electron.ipcRenderer.on('getApp-reply', (event, arg) => {
-    statementList1 = arg.statementList;
+    console.log(arg)
   })
   electron.ipcRenderer.on('loadApp-finish', (event, arg) => {
-    electron.ipcRenderer.send('getApp', 'testApp1');
+    electron.ipcRenderer.send('getApp');
   })
   electron.ipcRenderer.send('loadApp', './theFile.txt');
 }
@@ -333,7 +333,7 @@ function App () {
           <Button onClick = {testButton4}>
             IfBuzzThenRecur
           </Button>
-          
+
         </Tab>
       </Tabs>
     </div>

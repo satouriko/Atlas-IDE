@@ -46,7 +46,7 @@ export function Recipe(props) {
       alert('Saved');
     })
     electron.ipcRenderer.send('saveApp', {
-      fileName: `./${appJson.appName}.txt`,
+      fileName: `./${appJson.appName}.json`,
       ...appJson,
       xml: simpleWorkspace.current.getXml()
     })

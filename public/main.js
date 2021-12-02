@@ -56,6 +56,12 @@ ipcMain.on('stopApp', (event, appName)=>{
   AppList[appName]['canExecute'] = false;
   event.sender.send('stopApp-finish', null);
 })
+
+ipcMain.on('deleteApp', (event, appName)=>{
+  delete AppList[appName];
+  event.sender.send('deleteApp-finish', null);
+})
+
 /*
 let appInfo = {
   appName: '',

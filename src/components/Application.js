@@ -112,7 +112,7 @@ export function Application(props) {
                   <Button size="small" kind="danger--tertiary" onClick={() => stopButton(row.cells[0].value)}>Stop</Button>
                 </TableCell>
                 <TableCell>
-                  <Button size="small" kind="secondary" onClick={() => stopButton(row.cells[0].value)}>Edit</Button>
+                  <Button size="small" kind="secondary" onClick={() => props.editApp(row.cells[0].value)}>Edit</Button>
                 </TableCell>
                 <TableCell>
                   <Button size="small" kind="danger" onClick={() => deleteButton(row.cells[0].value)}>Delete</Button>

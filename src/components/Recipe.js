@@ -42,10 +42,13 @@ export function Recipe(props) {
   }, [Object.keys(tweetInfo.Service).sort().join('\n')])
   const simpleWorkspace = useRef()
   const save = (appJson) => {
-    electron.ipcRenderer.once('saveApp-finish', (event, arg) => {
-      alert('Saved');
-      props.onSave();
-    })
+    const listener = (event, arg) => {
+      if (arg === `./${appJson.appName}.json`) {
+        alert('Saved ' + arg)
+        electron.ipcRenderer.off('saveApp-finish', listener)
+      }
+    }
+    electron.ipcRenderer.on('saveApp-finish', listener)
     electron.ipcRenderer.send('saveApp', {
       fileName: `./${appJson.appName}.json`,
       ...appJson,
@@ -56,7 +59,9 @@ export function Recipe(props) {
     const code = BlocklyJS.workspaceToCode(
       simpleWorkspace.current.workspace
     )
-    save(JSON.parse(code))
+    code.split('\n').forEach(c => {
+      save(JSON.parse(c))
+    })
   }
   const open = () => {
     const input = document.createElement('input')
@@ -65,7 +70,6 @@ export function Recipe(props) {
       const file = e.target.files[0]
       electron.ipcRenderer.once('loadApp-finish', (event, arg) => {
         simpleWorkspace.current?.setXml(arg.xml)
-        console.log(arg)
       })
       electron.ipcRenderer.send('loadApp', file.path)
     }

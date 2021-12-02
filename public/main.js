@@ -42,7 +42,7 @@ let appInfo = {
 }
 */
 ipcMain.on('runApp', async (event, appInfo) => {
-  AppList[appInfo.appName] = appInfo;
+  //AppList[appInfo.appName] = appInfo;
   AppList[appInfo.appName]['canExecute'] = true;
   for(let i = 0; i < AppList[appInfo.appName].statementList.length; i++){
     if(AppList[appInfo.appName]['canExecute']){
@@ -79,7 +79,7 @@ ipcMain.on('saveApp', (event, appInfo) => {
     fs.writeFile(appInfo.fileName, JSON.stringify(AppList[appInfo.appName]), function (err) {
       if (err) throw err;
       console.log('File is created successfully.');
-      event.sender.send('saveApp-finish', null);
+      event.sender.send('saveApp-finish', appInfo.fileName);
     });
   } catch (err) {
     console.error(err)

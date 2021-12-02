@@ -75,7 +75,7 @@ async function executeStatement(tweetInfo, statement){
                     });
                     if(services1.Status == 'Successful') {
                         let server2Input = [];
-                        server2Input.push(services1.getElementById('Service Result'));
+                        server2Input.push(+services1['Service Result']);
                         services2 = await serviceCall(tweetInfo, {
                             thingID: statement.thingID2,
                             entityID: statement.entityID2,

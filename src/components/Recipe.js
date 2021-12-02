@@ -42,9 +42,8 @@ export function Recipe(props) {
   }, [Object.keys(tweetInfo.Service).sort().join('\n')])
   const simpleWorkspace = useRef()
   const save = (appJson) => {
-    console.log('save', appJson);
     electron.ipcRenderer.on('saveApp-finish', (event, arg) => {
-      console.log('finish saving');
+      alert('Saved');
     })
     electron.ipcRenderer.send('saveApp', {
       fileName: `./${appJson.appName}.txt`,

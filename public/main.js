@@ -69,6 +69,7 @@ let appInfo = {
   statementList: [],
   xml: ''
 }
+*/
 
 ipcMain.on('saveApp', (event, appInfo) => {
   if(AppList[appInfo.appName] === undefined){

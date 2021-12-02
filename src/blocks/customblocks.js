@@ -48,10 +48,15 @@ Blockly.JavaScript['cond_eval'] = function(block) {
 };
 
 Blockly.JavaScript['recipe'] = function(block) {
-  const statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
+  const appName = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
+  const statements_name = Blockly.JavaScript.statementToCode(block, 'STATEMENTS');
   // TODO: Assemble JavaScript into code variable.
   const code = '[' + (statements_name.replace(/}\{/g, '},{')).trim() + ']';
-  return code;
+  let statement = {
+    appName: appName.replace(/^'|'$/g, ''),
+    statementList: JSON.parse(code)
+  }
+  return JSON.stringify(statement);
 };
 Blockly.JavaScript['ignore'] = function(block) {
   var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
@@ -145,7 +150,10 @@ export function makeCustomBlocks (tweetInfo) {
 
 Blockly.Blocks['recipe'] = {
   init: function() {
-    this.appendStatementInput("NAME")
+    this.appendValueInput("NAME")
+      .setCheck("String")
+      .appendField("App name");
+    this.appendStatementInput("STATEMENTS")
       .setCheck(null)
       .appendField("")
       .appendField("Recipe");

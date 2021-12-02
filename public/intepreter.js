@@ -30,6 +30,12 @@ function listToString(list){
     return output;
 }
 
+async function executeStatements(tweetInfo, statements) {
+    for(let i = 0; i < statements.length; i++){
+        await executeStatement(tweetInfo, statements[i]);
+    }
+}
+
 async function executeStatement(tweetInfo, statement){
     console.log('Try to execute!!');
     let result = false;
@@ -124,7 +130,7 @@ async function executeStatement(tweetInfo, statement){
             }
             return result;
         case 'ifThen':
-            let pass = false;    
+            let pass = false;
             try {
                 let ifStatement1 = await executeStatement(tweetInfo, statement.ifStatement);
                 if(typeof ifStatement1 == 'boolean') {
@@ -140,12 +146,8 @@ async function executeStatement(tweetInfo, statement){
             result = false;
             if(pass) {
                 try {
-                    let thenStatement2 = await executeStatement(tweetInfo, statement.thenStatement);
-                    if(typeof thenStatement2 == 'boolean') {
-                        result  = thenStatement2;
-                    }else if(thenStatement2.Status == 'Successful') {
-                        result = true;
-                    }
+                    await executeStatements(tweetInfo, statement.thenStatement);
+                    result = true;
                 }catch(err) {
                     console.log(err);
                 }finally {

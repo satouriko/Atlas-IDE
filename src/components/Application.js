@@ -6,6 +6,7 @@ import {
   TableRow,
 } from 'carbon-components-react'
 import * as React from 'react'
+import { useState } from 'react'
 
 const electron = window.require('electron')
 const headers = [
@@ -31,26 +32,39 @@ const headers = [
   }
 ]
 
-function runButton(input){
-  electron.ipcRenderer.once('runApp-finish', (event, arg) => {
-    console.log('finish running statement ' + arg);
-  })
-  electron.ipcRenderer.send('runApp', {
-    appName: input
-  })
-}
-
-function stopButton(appName){
-  console.log('stop');
-  electron.ipcRenderer.send('stopApp', appName);
-}
-
 export function Application(props) {
   const { appInfo } = props
   const rows = Object.keys(appInfo).map(key => ({
     id: key,
     ...appInfo[key]
   }))
+  const [runningState, setRunningState] = useState({})
+
+  const runButton = (input) => {
+    const listener = (event, arg) => {
+      if (input === arg.appName) {
+        setRunningState({
+          ...runningState,
+          [input]: arg.i
+        })
+        if (arg.i === appInfo[input].statementList.length - 1) {
+          electron.ipcRenderer.off('runApp-finish', listener)
+        }
+      }
+    }
+    electron.ipcRenderer.on('runApp-finish', listener)
+    setRunningState({
+      ...runningState,
+      [input]: -1
+    })
+    electron.ipcRenderer.send('runApp', {
+      appName: input
+    })
+  }
+
+  const stopButton = (appName) => {
+    electron.ipcRenderer.send('stopApp', appName);
+  }
 
   const open = () => {
     const input = document.createElement('input')
@@ -106,10 +120,14 @@ export function Application(props) {
                   {row.cells[0].value}
                 </TableCell>
                 <TableCell>
-                  <Button size="small" onClick={() => runButton(row.cells[0].value)}>Start</Button>
+                  <Button
+                    disabled={runningState[row.cells[0].value] !== undefined && runningState[row.cells[0].value] !== appInfo[row.cells[0].value].statementList.length - 1}
+                    size="small" onClick={() => runButton(row.cells[0].value)}>Start</Button>
                 </TableCell>
                 <TableCell>
-                  <Button size="small" kind="danger--tertiary" onClick={() => stopButton(row.cells[0].value)}>Stop</Button>
+                  <Button
+                    disabled={runningState[row.cells[0].value] === undefined || runningState[row.cells[0].value] === appInfo[row.cells[0].value].statementList.length - 1}
+                    size="small" kind="danger--tertiary" onClick={() => stopButton(row.cells[0].value)}>Stop</Button>
                 </TableCell>
                 <TableCell>
                   <Button size="small" kind="secondary" onClick={() => props.editApp(row.cells[0].value)}>Edit</Button>

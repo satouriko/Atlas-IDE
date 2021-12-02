@@ -48,7 +48,10 @@ ipcMain.on('runApp', async (event, appInfo) => {
     if(AppList[appInfo.appName]['canExecute']){
       await executeStatement(tweetInfo, AppList[appInfo.appName].statementList[i]);
     }
-    event.sender.send('runApp-finish', i);
+    event.sender.send('runApp-finish', {
+      appName: appInfo.appName,
+      i
+    });
   }
 })
 

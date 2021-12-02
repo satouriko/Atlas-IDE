@@ -92,7 +92,7 @@ ipcMain.on('loadApp', (event, fileName) => {
       if (err) throw err;
       targetApp = JSON.parse(data);
       AppList[targetApp.appName] = targetApp;
-      event.sender.send('loadApp-finish', null);
+      event.sender.send('loadApp-finish', targetApp.appName);
     });
   } catch (err) {
     console.error(err);

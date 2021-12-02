@@ -86,7 +86,7 @@ async function executeStatement(tweetInfo, statement){
                             thingID: statement.thingID2,
                             entityID: statement.entityID2,
                             serviceName: statement.serviceName2,
-                            serviceInput: statement.serviceInput2,
+                            serviceInput: server2Input,
                         });
                         if(services2.Status == 'Successful') {
                             result = true;

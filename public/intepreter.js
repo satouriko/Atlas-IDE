@@ -45,7 +45,7 @@ async function executeStatement(tweetInfo, statement){
         case 'relationship':
             result = false;
             switch(statement.relationshipType) {
-                case 'Control':
+                case 'control':
                     let services1 = await serviceCall(tweetInfo, {
                         thingID: statement.thingID,
                         entityID: statement.entityID,
@@ -64,7 +64,7 @@ async function executeStatement(tweetInfo, statement){
                         }
                     }
                     break;
-                case 'Drive':
+                case 'drive':
                     services1 = await serviceCall(tweetInfo, {
                         thingID: statement.thingID,
                         entityID: statement.entityID,
@@ -85,7 +85,7 @@ async function executeStatement(tweetInfo, statement){
                         }
                     }
                     break;
-                case 'Support':
+                case 'support':
                     services1 = await serviceCall(tweetInfo, {
                         thingID: statement.thingID,
                         entityID: statement.entityID,
@@ -104,7 +104,7 @@ async function executeStatement(tweetInfo, statement){
                         }
                     }
                     break;
-                case 'Extended':
+                case 'extend':
                     services1 = await serviceCall(tweetInfo, {
                         thingID: statement.thingID,
                         entityID: statement.entityID,

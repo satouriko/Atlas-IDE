@@ -323,7 +323,7 @@ Blockly.JavaScript['extend'] = function(block) {
     thingID: input1.thingID,//service if type is service, service1 if type is relationship
     entityID: input1.entityID,
     serviceName: input1.serviceName,
-    serviceInput: input1.serviceName,
+    serviceInput: input1.serviceInput,
     relationshipType: 'extend',
     thingID2: input2.thingID,
     entityID2: input2.entityID,

@@ -1,14 +1,24 @@
 Group # 8
 
+* [An IDE for Atlas Thing Architecture](#an-ide-for-atlas-thing-architecture)
+   * [1. Introduction (about 1 pages)](#1-introduction-about-1-pages)
+   * [2. Project Design (about 1.5 pages)](#2-project-design-about-15-pages)
+      * [2.1 Challenges Faced (about 1 page)](#21-challenges-faced-about-1-page)
+   * [3. Implementation (about 1.5 pages, plus as much as needed for the screen shots)](#3-implementation-about-15-pages-plus-as-much-as-needed-for-the-screen-shots)
+      * [3.1 Backend code folder explanation and implementation details](#31-backend-code-folder-explanation-and-implementation-details)
+      * [3.2 Frontend code folder explanation and implementation details](#32-frontend-code-folder-explanation-and-implementation-details)
+      * [3.3 New things we learned and our experience](#33-new-things-we-learned-and-our-experience)
+      * **[3.4 Screenshots and how to use our IDE](#34-screenshots-and-how-to-use-our-ide)**
+      * [3.1 Subjective Evaluation (0.5 page)](#31-subjective-evaluation-05-page)
+      * [3.2 Future Work (0.5 pages)](#32-future-work-05-pages)
+      * [3.3 Distribution of Effort (who did what, names listed alphabetically)](#33-distribution-of-effort-who-did-what-names-listed-alphabetically)
+
 # An IDE for Atlas Thing Architecture 
 
-Li, Jiahao
-
-Li, Sijia
-
-Liu, Xuanting
-
-Zhu, Qiyue
+- Li, Jiahao
+- Li, Sijia
+- Liu, Xuanting
+- Zhu, Qiyue
 
 ![img](https://lh6.googleusercontent.com/B2UwaWAUkdrvnZGd95T3VeoCMbETTtaXjwcsd-XZpRgQj8lOHUuOCXdgmzSpcMFKEM5VxYWSBnXDe_ZPiB-H0iVGMg0RbNQkShvPvNSGoM2VpSEQ_SqhWoIIkEGsrsPRM0KKzjL4)
 
@@ -105,7 +115,9 @@ Each statement can only be one of the three types: standalone service, standalon
 
 We wrote a function to execute a statement based on its type, called “executeStatement”. It is a very long function and all the services, relationships (together 4 kinds of relationships supported), and (nested) ifthen are supported. We have tested that they can be executed. To execute an app, we only need to execute it statement by statement and we check before we execute so we can stop any app in the middle. We also encapsulate a function for the service call here.
 
-### 3.2 Frontend code folder explanation and implementation details![img](https://lh4.googleusercontent.com/XuHu3QaFZbIHRfIXrf9FfQOdfxugSZkQ4wzdT3oLc_OUHeJiaC0a9S7LnUA7hEhkZPDh7rwiudhy5NrO4eQTLTfaPvGZ9LICfgo4klpFkIs4e7niME-rFAJPjrmfyMOcxMRyUgQU)
+### 3.2 Frontend code folder explanation and implementation details
+
+![img](https://lh4.googleusercontent.com/XuHu3QaFZbIHRfIXrf9FfQOdfxugSZkQ4wzdT3oLc_OUHeJiaC0a9S7LnUA7hEhkZPDh7rwiudhy5NrO4eQTLTfaPvGZ9LICfgo4klpFkIs4e7niME-rFAJPjrmfyMOcxMRyUgQU)
 
 This is the components folder. In this folder, the code for each tab is returned. Things.js returns a table of the available Things as it is received from the backend by the multicast tweets. Services.js and Relationships.js serve a similar function, except that it also has a drop down menu to filter the respective category by Thing Id. Recipe.js holds the Blockly workspace so that users can pick the Blockly block that suits their needs and build up their application as dictated by the recipe.
 
@@ -160,7 +172,7 @@ Watch as available Things, Services, and Relationships start populating as it ac
 
 
 
-![img](https://lh5.googleusercontent.com/ciLTF5AF6RjHF5tHhlVpQKsJsHCxPN-1KLluE_bPs7L2cVB0hvEFBaE7UrBe0S9G6XzcCSJ_mRuNmKP5rkX0w1jiCrRIr0SG3YCLqDouidU2odhTmaj1E-P7Mq7IZO0FAVNb8LTV)**Figure Recipes: Example Recipe Built. Note that the input field of services should be filled; I forgot to add when I screenshotted.**
+![img](https://lh5.googleusercontent.com/ciLTF5AF6RjHF5tHhlVpQKsJsHCxPN-1KLluE_bPs7L2cVB0hvEFBaE7UrBe0S9G6XzcCSJ_mRuNmKP5rkX0w1jiCrRIr0SG3YCLqDouidU2odhTmaj1E-P7Mq7IZO0FAVNb8LTV) **Figure Recipes: Example Recipe Built. Note that the input field of services should be filled; I forgot to add when I screenshotted.**
 
 
 
@@ -187,7 +199,7 @@ The main challenges for the project are adapting to new frameworks, handling asy
 - Detect the IP environment and change it automatically instead of manually
 - Generate executable files to run the app without the help of IDE
 
-## 3.3 Distribution of Effort (who did what, names listed alphabetically)
+### 3.3 Distribution of Effort (who did what, names listed alphabetically)
 
 | **Student Name** | What was done?                                   | % Effort | Comments |
 | ---------------- | ------------------------------------------------ | -------- | -------- |
